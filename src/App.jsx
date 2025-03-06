@@ -1,6 +1,11 @@
 import './App.css'
 import { useState } from 'react';
+import DeleteButton from './components/DeleteButton.jsx';
+import UpdateButton from './components/UpdataButton.jsx';
 function App() {
+
+  //컴포넌트 분리하기
+
   const [todos, setTodos] = useState([
     { id: 1, task: '투두 만들어보기' }, { id: 2, task: '제영 오소이' }
   ]);
@@ -26,14 +31,9 @@ function App() {
     console.log(id);
   };
 
-  //수정하기 구현 생각
-  // 1. 먼저 버튼을 클릭했을 때 id를 가져온다
-  // 2. Todd 배열을 돌며 일치하는 id를 찾는다
-  // 3. id가 일치할 시에 다른값들은 건들이지말고 해당 id값의 task값을 수정한다
-  // 4. 어떻게? 삼항 연산자를 써서 같을시에 item.task == 수정값으로  
   const updateTodo = (id, text) => {
     setTodos((prev) =>
-      prev.map((item) => item.id === id ? {...item, task : text} : item)
+      prev.map((item) => item.id === id ? { ...item, task: text } : item)
     );
     seteditingId('');
   }
@@ -56,18 +56,15 @@ function App() {
             {editingId === id && (
               <div style={{ display: 'flex', gap: '5px' }} key={id}>
                 <p>{id}.</p>
-                <input 
+                <input
                   defaultValue={task}
                   onChange={(e) => seteditText(e.target.value)}
                 ></input>
               </div>
             )
             }
-            <button onClick={() => deleteTodo(id)}>삭제하기</button>
-            {editingId === id ? (
-              <button onClick={(e) => updateTodo(editingId, editText)}>수정 중</button>
-            ) : (
-              <button onClick={() => seteditingId(id)}>수정 진행</button>)}
+            <DeleteButton deleteTodo={deleteTodo} id={id}></DeleteButton>
+            <UpdateButton editingId={editingId} id={id} seteditingId={seteditingId}></UpdateButton>
           </div>
         )}
       </div>
