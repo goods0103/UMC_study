@@ -1,4 +1,4 @@
-const UpdateButton = ({editingId, id, seteditingId}) => {
+const UpdateButton = ({editingId, id, seteditingId, updateTodo, editText}) => {
     console.log(id);
     console.log(editingId);
     return (

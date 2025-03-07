@@ -1,7 +1,9 @@
 import './App.css'
 import { useState } from 'react';
-import DeleteButton from './components/DeleteButton.jsx';
-import UpdateButton from './components/UpdataButton.jsx';
+import DeleteButton from './components/Buttons/DeleteButton.jsx';
+import UpdateButton from './components/Buttons/UpdataButton.jsx';
+import WriteInput from './components/Inputs/WriteInput.jsx';
+import UpdateInput from './components/Inputs/UpdateInput.jsx';
 function App() {
 
   //컴포넌트 분리하기
@@ -40,7 +42,7 @@ function App() {
   return (
     <>
       <form onSubmit={handleSubmit}>
-        <input type='text' value={text} onChange={(e) => setText(e.target.value)} />
+        <WriteInput text={text} setText={setText} ></WriteInput>
         <button onClick={() => addTodo()} type='submit'>할일 등록</button>
       </form>
       <div>
@@ -56,15 +58,12 @@ function App() {
             {editingId === id && (
               <div style={{ display: 'flex', gap: '5px' }} key={id}>
                 <p>{id}.</p>
-                <input
-                  defaultValue={task}
-                  onChange={(e) => seteditText(e.target.value)}
-                ></input>
+                <UpdateInput task={task} seteditText={seteditText}></UpdateInput>
               </div>
             )
             }
             <DeleteButton deleteTodo={deleteTodo} id={id}></DeleteButton>
-            <UpdateButton editingId={editingId} id={id} seteditingId={seteditingId}></UpdateButton>
+            <UpdateButton editingId={editingId} id={id} seteditingId={seteditingId} updateTodo={updateTodo} editText={editText}></UpdateButton>
           </div>
         )}
       </div>
