@@ -4,7 +4,7 @@ const UpdateInput = ({task, seteditText}) => {
             defaultValue={task}
             onChange={(e) => {
                 seteditText(e.target.value);
-                console.log(e);
+                // console.log(e);
             }}
         ></input>
     )

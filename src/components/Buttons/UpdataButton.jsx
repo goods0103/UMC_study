@@ -1,13 +1,15 @@
+import {Button} from 'react-bootstrap';
+
 const UpdateButton = ({editingId, id, seteditingId, updateTodo, editText}) => {
-    console.log(id);
-    console.log(editingId);
+
+        
     return (
         <>
             {
                 editingId === id ? (
-                    <button onClick={() => updateTodo(editingId, editText)}>수정 중</button>
+                    <Button variant="outline-primary" onClick={() => updateTodo(editingId, editText)}>수정 중</Button>
                 ) : (
-                    <button onClick={() => seteditingId(id)}>수정 진행</button>)
+                    <Button variant="primary" onClick={() => seteditingId(id)}>수정 진행</Button>)
             }
         </>
     )
