@@ -1,9 +1,10 @@
 import './App.css'
 import { useState } from 'react';
 import DeleteButton from './components/Buttons/DeleteButton.jsx';
-import UpdateButton from './components/Buttons/UpdataButton.jsx';
+import UpdateButton from './components/Buttons/UpdateButton.jsx';
 import WriteInput from './components/Inputs/WriteInput.jsx';
 import UpdateInput from './components/Inputs/UpdateInput.jsx';
+import Movies from './components/Movies.jsx';
 function App() {
 
   //컴포넌트 분리하기
@@ -41,7 +42,8 @@ function App() {
   }
   return (
     <>
-      <form onSubmit={handleSubmit}>
+      <Movies></Movies>
+      <form className='formCss' onSubmit={handleSubmit}>
         <WriteInput text={text} setText={setText} ></WriteInput>
         <button onClick={() => addTodo()} type='submit'>할일 등록</button>
       </form>
