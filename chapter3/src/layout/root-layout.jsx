@@ -11,6 +11,11 @@ const Layout = styled.div`
 const MainContent = styled.div`
   flex: 1; /* 남은 공간을 모두 차지 */
   padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  background-color: #121212;
+  overflow-y: auto;
 `;
 
 const RootLayout = () => {

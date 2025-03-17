@@ -1,5 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
+
+const ImgStyle1 = styled.img`
+  border-radius: 10px;
+`;
+
+const MovieInfo1 = styled.div`
+  width: 200px;
+  color: white;
+`;
+
+const MovieBox = styled.div`
+  color: white;
+`;
 
 const HomePage = () => {
   //영화를 담을 state
@@ -8,7 +22,7 @@ const HomePage = () => {
   useEffect(() => {
     const getMovies = async () => {
       const movies = await axios.get(
-        "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1",
+        "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=ko-KR&page=3",
         {
           headers: {
             Authorization:
@@ -24,9 +38,16 @@ const HomePage = () => {
 
   return (
     <>
-      {movies.data?.results.map((movies) => {
-        <img src="https://image.tmdb.org/t/p/w500/qUc0Hol3eP74dbW4YyqT6oRLYgT.jpg" />;
-      })}
+      {movies.data?.results.map((movies) => (
+        <div key={movies.id}>
+          <ImgStyle1
+            src={`https://image.tmdb.org/t/p/w200/${movies.poster_path}`}
+          />
+          <MovieInfo1>{movies.title}</MovieInfo1>
+          <MovieInfo1>{movies.release_date}</MovieInfo1>
+        </div>
+      ))}
+      7
     </>
   );
 };
