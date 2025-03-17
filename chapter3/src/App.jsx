@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/home";
 import NotFound from "./pages/not-found";
 import RootLayout from "./layout/root-layout";
-import MoviesPage from "./pages/movies";
 import LoginPage from "./pages/login";
 import SignPage from "./pages/signup";
 import SearchPage from "./pages/search";
@@ -20,10 +19,6 @@ function App() {
         {
           index: true,
           element: <HomePage />,
-        },
-        {
-          path: "movies",
-          element: <MoviesPage />,
         },
         {
           path: "login",
