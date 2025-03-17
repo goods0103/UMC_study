@@ -23,6 +23,9 @@ const RightSection = styled.div`
 `;
 
 const LoginStyle1 = styled(Link)`
+  &:hover {
+    background-color: pink;
+  }
   background: transparent;
   padding: 10px 10px;
   color: white;
@@ -39,8 +42,8 @@ const Navbar = () => {
     <NavStyle1>
       <LogoStyle1 to={"/"}>Netflix</LogoStyle1>
       <RightSection>
-        <LoginStyle1>로그인</LoginStyle1>
-        <SignStyle1 to="/movies">회원가입</SignStyle1>
+        <LoginStyle1 to="/login">로그인</LoginStyle1>
+        <SignStyle1 to="/signup">회원가입</SignStyle1>
       </RightSection>
     </NavStyle1>
   );

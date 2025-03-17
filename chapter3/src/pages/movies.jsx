@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { MOVIES } from "../mocks/movies";
 import axios from "axios";
 
 const MoviesPage = () => {

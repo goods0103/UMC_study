@@ -1,9 +1,13 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import HomePage from "./pages/home";
-import Movies from "./pages/movies";
 import NotFound from "./pages/not-found";
 import RootLayout from "./layout/root-layout";
+import MoviesPage from "./pages/movies";
+import LoginPage from "./pages/login";
+import SignPage from "./pages/signup";
+import SearchPage from "./pages/search";
+import CategoryPage from "./pages/category";
 
 function App() {
   //컴포넌트 분리하기
@@ -19,7 +23,23 @@ function App() {
         },
         {
           path: "movies",
-          element: <Movies />,
+          element: <MoviesPage />,
+        },
+        {
+          path: "login",
+          element: <LoginPage />,
+        },
+        {
+          path: "signup",
+          element: <SignPage />,
+        },
+        {
+          path: "search",
+          element: <SearchPage />,
+        },
+        {
+          path: "category",
+          element: <CategoryPage />,
         },
       ],
     },
