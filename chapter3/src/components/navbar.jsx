@@ -1,11 +1,48 @@
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 
+//navbar style
+const NavStyle1 = styled.nav`
+  background-color: black;
+  height: 40px;
+  display: flex;
+  text-align: center;
+  justify-content: space-between;
+  position: relative;
+`;
+
+const LogoStyle1 = styled(Link)`
+  color: #f472b6;
+  font-weight: bold;
+  padding: 10px 20px;
+`;
+
+const RightSection = styled.div`
+  display: flex;
+  text-align: center;
+`;
+
+const LoginStyle1 = styled(Link)`
+  background: transparent;
+  padding: 10px 10px;
+  color: white;
+  height: 100%;
+`;
+const SignStyle1 = styled(Link)`
+  background: transparent;
+  padding: 10px 10px;
+  color: red;
+  height: 100%;
+`;
 const Navbar = () => {
   return (
-    <nav>
-      <Link to={"/"}>홈 페이지로 이동</Link>
-      <Link to="/movies">영화 목록 페이지로 이동</Link>
-    </nav>
+    <NavStyle1>
+      <LogoStyle1 to={"/"}>Netflix</LogoStyle1>
+      <RightSection>
+        <LoginStyle1>로그인</LoginStyle1>
+        <SignStyle1 to="/movies">회원가입</SignStyle1>
+      </RightSection>
+    </NavStyle1>
   );
 };
 export default Navbar;
