@@ -15,6 +15,7 @@ const MainContent = styled.div`
   flex-wrap: wrap;
   gap: 8px;
   background-color: grey;
+  justify-content: space-evenly; /* 아이템들을 균등하게 배치 */
   overflow-y: auto;
 `;
 

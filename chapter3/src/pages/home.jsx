@@ -31,7 +31,7 @@ const HomePage = () => {
         }
       );
       setMovies(movies);
-      console.log(movies);
+      // console.log(movies);
     };
     getMovies();
   }, []);
@@ -47,7 +47,6 @@ const HomePage = () => {
           <MovieInfo1>{movies.release_date}</MovieInfo1>
         </div>
       ))}
-      7
     </>
   );
 };
