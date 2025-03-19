@@ -22,7 +22,7 @@ const Sidebar = () => {
         <MdOutlineSearch />
         찾기
       </SideStyle2>
-      <SideStyle2 to="/category">
+      <SideStyle2 to="/movies">
         <MdLocalMovies />
         영화
       </SideStyle2>

@@ -14,7 +14,7 @@ const MainContent = styled.div`
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
-  background-color: #121212;
+  background-color: grey;
   overflow-y: auto;
 `;
 
