@@ -3,6 +3,9 @@ import axios from "axios";
 import styled from "styled-components";
 
 const ImgStyle1 = styled.img`
+  width: 200px;
+  height: 300px;
+  object-fit: cover; /* 비율 유지하면서 꽉 채움 */
   border-radius: 10px;
 `;
 

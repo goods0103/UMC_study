@@ -26,7 +26,7 @@ const NowPlaying = () => {
   useEffect(() => {
     const getMovies = async () => {
       const movies = await axios.get(
-        "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=co-KR&page=1&sort_by=popularity.desc",
+        "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=en-US&page=1&sort_by=popularity.desc&with_release_type=2|3&release_date.gte={min_date}&release_date.lte={max_date}",
         {
           headers: {
             Authorization:

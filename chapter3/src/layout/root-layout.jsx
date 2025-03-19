@@ -17,11 +17,6 @@ const MainContent = styled.div`
   background-color: grey;
   justify-content: space-evenly; /* 아이템들을 균등하게 배치 */
   overflow-y: auto;
-
-  &::after {
-    content: "";
-    flex: auto;
-  }
 `;
 
 const RootLayout = () => {
