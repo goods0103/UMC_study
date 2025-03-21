@@ -21,20 +21,25 @@ const MovieBox = styled.div`
 const Popular = () => {
   const [movies, setMovies] = useState([]);
 
+  axios.get;
   // useState로 데이터 불러오기
   useEffect(() => {
     const getMovies = async () => {
       const movies = await axios.get(
-        "https://api.themoviedb.org/3/discover/movie?include_adult=false&include_video=false&language=co-KR&page=1&sort_by=popularity.desc",
+        `${
+          import.meta.env.VITE_MOVIE_BASE_URL
+        }/movie/popular?language=en-US&page=1`,
         {
           headers: {
-            Authorization:
-              "Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMjhhNmQyYTVhMDFhZTBkYWM3NDIxOTA0ZTNkNzc5ZiIsIm5iZiI6MTc0MTkyOTgwOC44MzUsInN1YiI6IjY3ZDNiZDUwYmY0ODE4ODU0YzY0ZjExNiIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.NMISSGVc0tw55_uilb9bIXWNFclXZSNRKTtRHDr6Z5E",
+            Authorization: `Bearer ${import.meta.env.VITE_MOVIE_AUTH}`,
           },
         }
       );
       setMovies(movies);
       console.log(movies);
+      console.log(movies.status); // 200이어도 데이터가 예상과 다른 경우가 있음
+      console.log(movies.statusText); // "OK"로 나올 것
+      console.log(movies.data); // 실제 데이터 출력
     };
     getMovies();
   }, []);
