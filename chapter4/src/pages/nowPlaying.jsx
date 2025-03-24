@@ -15,9 +15,6 @@ const NowPlaying = () => {
       </>
     );
   }
-  console.log(movies);
-  console.log(isLoading);
-  console.log(isError);
 
   return <>{<Card movies={movies} />}</>;
 };
