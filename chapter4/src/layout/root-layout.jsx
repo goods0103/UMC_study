@@ -10,13 +10,14 @@ const Layout = styled.div`
 
 const MainContent = styled.div`
   flex: 1; /* 남은 공간을 모두 차지 */
+  flex-direction: column;
   padding: 20px;
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 50px 20px;
   background-color: grey;
-  justify-content: space-evenly; /* 아이템들을 균등하게 배치 */
   overflow-y: auto;
+  align-items: flex-start;
 `;
 
 const RootLayout = () => {

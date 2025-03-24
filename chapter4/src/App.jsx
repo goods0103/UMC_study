@@ -6,11 +6,12 @@ import RootLayout from "./layout/root-layout";
 import LoginPage from "./pages/login";
 import SignPage from "./pages/signup";
 import SearchPage from "./pages/search";
-import CategoryPage from "./pages/movies/category";
-import NowPlaying from "./pages/movies/nowplaying";
-import Popular from "./pages/movies/popular";
-import TopRated from "./pages/movies/topRated";
-import UpComming from "./pages/movies/upComing";
+import CategoryPage from "./pages/category";
+import NowPlaying from "./pages/nowPlaying";
+import Popular from "./pages/popular";
+import TopRated from "./pages/topRated";
+import UpComming from "./pages/upComing";
+import MovieDetail from "./pages/movieDetail";
 
 function App() {
   //컴포넌트 분리하기
@@ -55,6 +56,10 @@ function App() {
             {
               path: "up-coming",
               element: <UpComming />,
+            },
+            {
+              path: ":movieId",
+              element: <MovieDetail />,
             },
           ],
         },

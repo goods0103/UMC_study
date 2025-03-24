@@ -1,5 +1,5 @@
 import styled from "styled-components";
-
+import { Link } from "react-router-dom";
 const ImgStyle1 = styled.img`
   width: 200px;
   height: 300px;
@@ -12,17 +12,22 @@ const MovieInfo1 = styled.div`
   color: white;
 `;
 
+const CardBox = styled(Link)`
+  width: 200px;
+  height: 400px;
+`;
+
 const Card = ({ movies }) => {
   return (
     <>
       {movies.data?.results.map((movies) => (
-        <div key={movies.id}>
+        <CardBox to={`/movies/${movies.id}`} key={movies.id}>
           <ImgStyle1
             src={`https://image.tmdb.org/t/p/w200/${movies.poster_path}`}
           />
           <MovieInfo1>{movies.title}</MovieInfo1>
           <MovieInfo1>{movies.release_date}</MovieInfo1>
-        </div>
+        </CardBox>
       ))}
     </>
   );

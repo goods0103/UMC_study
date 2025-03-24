@@ -1,5 +1,5 @@
-import Card from "../../components/card";
-import useCustomFetch from "../../hooks/useCustomFetch";
+import Card from "../components/card";
+import useCustomFetch from "../hooks/useCustomFetch";
 
 const UpComming = () => {
   const {
