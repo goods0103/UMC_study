@@ -1,13 +1,24 @@
 import useCustomFetch from "../../hooks/useCustomFetch";
+import Card from "../../components/card";
 
 const NowPlaying = () => {
-  const { data, isloading, isError } = useCustomFetch(
-    "/movie/now_playing?language=en-US&page=1"
-  );
-  console.log(data);
-  console.log(isloading);
+  const {
+    data: movies,
+    isLoading,
+    isError,
+  } = useCustomFetch("/movie/now_playing?language=ko-KR");
+
+  if (isError) {
+    return (
+      <>
+        <h1 style={{ color: "white" }}>에러입니다</h1>
+      </>
+    );
+  }
+  console.log(movies);
+  console.log(isLoading);
   console.log(isError);
 
-  return <>{/* <Card data={data}></Card> */}</>;
+  return <>{<Card movies={movies} />}</>;
 };
 export default NowPlaying;

@@ -1,23 +1,13 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
 import Card from "../../components/card";
-import { axiosInstance } from "../../apis/axios-instance";
+import useCustomFetch from "../../hooks/useCustomFetch";
 
 const Popular = () => {
-  const [movies, setMovies] = useState([]);
+  const {
+    data: movies,
+    isLoading,
+    isError,
+  } = useCustomFetch("/movie/popular?language=ko-KR");
 
-  axios.get;
-  // useState로 데이터 불러오기
-  useEffect(() => {
-    const getMovies = async () => {
-      const movies = await axiosInstance.get(
-        "/movie/popular?language=en-US&page=1"
-      );
-      setMovies(movies);
-      console.log(movies);
-    };
-    getMovies();
-  }, []);
   return (
     <>
       <Card movies={movies} />

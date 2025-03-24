@@ -3,7 +3,7 @@ import { axiosInstance } from "../apis/axios-instance";
 
 const useCustomFetch = (url) => {
   const [data, setData] = useState([]);
-  const [Isloading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
 
   useEffect(() => {
@@ -21,7 +21,7 @@ const useCustomFetch = (url) => {
     };
     fetchData();
   }, [url]);
-  return { data, Isloading, isError };
+  return { data, isLoading, isError };
 };
 
 export default useCustomFetch;
