@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 //navbar style
 const NavStyle1 = styled.nav`
-  background-color: black;
+  background-color: #555555;
   height: 40px;
   display: flex;
   text-align: center;

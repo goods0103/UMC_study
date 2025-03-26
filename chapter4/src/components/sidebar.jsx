@@ -3,7 +3,7 @@ import { MdOutlineSearch, MdLocalMovies } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 const SideStyle1 = styled.div`
-  background-color: darkgrey;
+  background-color: #333333;
   text-align: center;
   display: flex;
   flex-direction: column;

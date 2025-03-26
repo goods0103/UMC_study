@@ -3,21 +3,22 @@ import useCustomFetch from "../hooks/useCustomFetch";
 import styled from "styled-components";
 
 const DetailWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr; /* 기본적으로 1열로 설정 (세로 배치) */
+  gap: 20px; /* 각 아이템 간의 간격 */
   width: 100%;
 `;
 
 const DetailHead = styled.div`
   background-image: url(${(props) =>
     `https://image.tmdb.org/t/p/original/${props.$imgpath}`});
-  background-size: cover; /* 혹은 contain */
-  background-repeat: no-repeat; /* 이미지 반복 방지 */
-  background-position: center; /* 이미지 중앙 정렬 */
-  display: flex;
-  flex-direction: column;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  display: grid; /* 자식 요소도 그리드로 설정 */
+  grid-template-columns: 1fr;
   width: 100%;
-  height: 30vh;
+  height: 35vh;
   border-radius: 10px;
   padding: 1em;
   gap: 10px;
@@ -25,54 +26,75 @@ const DetailHead = styled.div`
 `;
 
 const DetailBody = styled.div`
-  flex: 1;
-  flex-direction: column;
-  flex-wrap: wrap;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: 1fr; /* 기본적으로 1열로 설정 */
+  gap: 20px;
+  margin: 0;
+  padding: 0;
   align-items: flex-start;
 `;
 
 const TitleStyle = styled.div`
-  font-family: "Roboto", sans-serif; // 고딕체 스타일의 폰트
-  font-weight: bold; // 볼드 처리
-  font-size: 48px; // 크기 조정
-  color: white; // 하얀색
-  text-align: start; // 중앙 정렬
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  font-size: 48px;
+  color: white;
+  text-align: start;
   -webkit-text-stroke: 0.5px black;
 `;
 
 const SubTitleStyle = styled.div`
-  font-family: "Roboto", sans-serif; // 고딕체 스타일의 폰트
-  font-weight: bold; // 볼드 처리
-  font-size: 20px; // 크기 조정
-  color: white; // 하얀색
-  text-align: left; // 중앙 정렬
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  font-size: 20px;
+  color: white;
+  text-align: left;
   -webkit-text-stroke: 0.5px black;
 `;
 
 const ContentStyle = styled.div`
-  font-family: "Roboto", sans-serif; // 고딕체 스타일의 폰트
-  font-weight: bold; // 볼드 처리
-  font-size: 18px; // 크기 조정
-  color: white; // 하얀색
-  text-align: left; // 중앙 정렬
+  font-family: "Roboto", sans-serif;
+  font-weight: bold;
+  font-size: 18px;
+  color: white;
+  text-align: left;
   -webkit-text-stroke: 0.5px black;
-  max-width: 40%; /* 설명이 너무 길어지지 않도록 제한 */
-  word-wrap: break-word; /* 긴 단어 줄바꿈 */
+  max-width: 40%;
+  word-wrap: break-word;
   margin-top: 30px;
 `;
 
+const ImgBody = styled.div`
+  display: grid; /* 그리드로 변경 */
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(150px, 1fr)
+  ); /* 자동으로 아이템을 가로로 배치 */
+  column-gap: 40px;
+  row-gap: 10px;
+  justify-items: center; /* 자식 요소들을 가로로 중앙 정렬 */
+  // display: flex; /* Flexbox로 변경하여 가로 배치 */
+  // gap: 40px; /* 각 이미지 간의 간격 */
+  // align-items: flex-start;
+  // flex-wrap: wrap; /* 내용이 많을 경우 줄바꿈 */
+`;
+
 const ImgBox = styled.div`
-  width: 100px;
+  width: 150px;
   height: 200px;
 `;
 
 const ImgStyle = styled.img`
-  width: 100px; /* 이미지의 크기 */
-  height: 100px; /* 이미지의 크기 */
-  border-radius: 50%; /* 원형으로 만들기 */
-  object-fit: cover; /* 이미지가 영역을 채우도록 설정 */
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
   border: 5px solid white;
+`;
+
+const ImgInfo = styled.div`
+  width: 150px;
+  color: white;
 `;
 
 const MovieDetail = () => {
@@ -87,7 +109,7 @@ const MovieDetail = () => {
     `/movie/${params.movieId}/credits?language=ko-KR`
   );
 
-  console.log(movie.data);
+  console.log(cast.data);
   return (
     <DetailWrapper>
       <DetailHead $imgpath={movie.data?.backdrop_path}>
@@ -100,16 +122,20 @@ const MovieDetail = () => {
       </DetailHead>
       <DetailBody>
         <TitleStyle>감독/출연</TitleStyle>
-        <ImgBox>
+        <ImgBody>
           {cast.data?.cast.map((casts) => (
-            <ImgStyle
-              key={casts.id}
-              src={`https://image.tmdb.org/t/p/w200/${casts.profile_path}`}
-            />
+            <ImgBox key={casts.id}>
+              <ImgStyle
+                src={`https://image.tmdb.org/t/p/w200/${casts.profile_path}`}
+              ></ImgStyle>
+              <ImgInfo>{casts.name}</ImgInfo>
+              <ImgInfo>{casts.known_for_department}</ImgInfo>
+            </ImgBox>
           ))}
-        </ImgBox>
+        </ImgBody>
       </DetailBody>
     </DetailWrapper>
   );
 };
+
 export default MovieDetail;
