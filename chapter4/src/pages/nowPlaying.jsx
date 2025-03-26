@@ -1,5 +1,7 @@
 import useCustomFetch from "../hooks/useCustomFetch";
 import Card from "../components/card";
+import Loading from "../components/loading";
+import Error from "../components/error";
 
 const NowPlaying = () => {
   const {
@@ -8,10 +10,18 @@ const NowPlaying = () => {
     isError,
   } = useCustomFetch("/movie/now_playing?language=ko-KR");
 
+  if (isLoading) {
+    return (
+      <>
+        <Loading></Loading>
+      </>
+    );
+  }
+
   if (isError) {
     return (
       <>
-        <h1 style={{ color: "white" }}>에러입니다</h1>
+        <Error></Error>
       </>
     );
   }

@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import useCustomFetch from "../hooks/useCustomFetch";
 import styled from "styled-components";
+import Loading from "../components/loading";
+import Error from "../components/error";
 
 const DetailWrapper = styled.div`
   display: grid;
@@ -108,6 +110,22 @@ const MovieDetail = () => {
   const { data: cast } = useCustomFetch(
     `/movie/${params.movieId}/credits?language=ko-KR`
   );
+
+  if (isLoading) {
+    return (
+      <>
+        <Loading></Loading>
+      </>
+    );
+  }
+
+  if (isError) {
+    return (
+      <>
+        <Error></Error>
+      </>
+    );
+  }
 
   console.log(cast.data);
   return (
