@@ -4,7 +4,7 @@ import HomePage from "./pages/home";
 import NotFound from "./pages/not-found";
 import RootLayout from "./layout/root-layout";
 import LoginPage from "./pages/login";
-import SignPage from "./pages/signup";
+import SignUpPage from "./pages/signup";
 import SearchPage from "./pages/search";
 import CategoryPage from "./pages/category";
 import NowPlaying from "./pages/nowPlaying";
@@ -31,7 +31,7 @@ function App() {
         },
         {
           path: "signup",
-          element: <SignPage />,
+          element: <SignUpPage />,
         },
         {
           path: "search",

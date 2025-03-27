@@ -12,7 +12,7 @@ const NavStyle1 = styled.nav`
 `;
 
 const LogoStyle1 = styled(Link)`
-  color: #f472b6;
+  color: #e50914;
   font-weight: bold;
   padding: 10px 20px;
 `;
