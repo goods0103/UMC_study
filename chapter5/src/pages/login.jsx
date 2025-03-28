@@ -26,7 +26,7 @@ const LoginText = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 3em;
+  font-size: 2em;
 `;
 
 const InputText = styled.input`
