@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { MdOutlineSearch, MdLocalMovies } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { MdOutlineSearch, MdOutlineMovie } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 const SideStyle1 = styled.div`
   background-color: #333333;
@@ -10,22 +10,24 @@ const SideStyle1 = styled.div`
   padding: 5px;
 `;
 
-const SideStyle2 = styled(Link)`
+const SideButton = styled.div`
+  background-color: transparent;
   color: white;
   margin: 10px;
 `;
 
 const Sidebar = () => {
+  const navigate = useNavigate();
   return (
     <SideStyle1>
-      <SideStyle2 to="/search">
+      <SideButton onClick={() => navigate("/search")}>
         <MdOutlineSearch />
         찾기
-      </SideStyle2>
-      <SideStyle2 to="/movies">
-        <MdLocalMovies />
+      </SideButton>
+      <SideButton onClick={() => navigate("/movies")}>
+        <MdOutlineMovie />
         영화
-      </SideStyle2>
+      </SideButton>
     </SideStyle1>
   );
 };

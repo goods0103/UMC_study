@@ -1,49 +1,59 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 //navbar style
 const NavStyle1 = styled.nav`
-  background-color: #555555;
-  height: 40px;
+  background-color: #333333;
+  width: 100%;
+  height: 8vh;
   display: flex;
   text-align: center;
   justify-content: space-between;
-  position: relative;
 `;
 
-const LogoStyle1 = styled(Link)`
+const LogoStyle = styled.div`
   color: #e50914;
   font-weight: bold;
-  padding: 10px 20px;
+  font-size: 21px;
+  padding: 1em;
 `;
 
 const RightSection = styled.div`
   display: flex;
+  height: 100%;
   text-align: center;
+  padding: 1em;
+  justify-content: center;
+  gap: 20px;
 `;
 
-const LoginStyle1 = styled(Link)`
+const LoginStyle = styled.div`
+  margin: auto;
+  text-align: center;
+  background: transparent;
+  font-size: 15px;
+  color: white;
+`;
+const SignStyle = styled.button`
+  text-align: center;
   &:hover {
     background-color: pink;
   }
-  background: transparent;
-  padding: 10px 10px;
+  margin: auto;
+  background: #e50914;
+  font-size: 15px;
   color: white;
-  height: 100%;
-`;
-const SignStyle1 = styled(Link)`
-  background: transparent;
-  padding: 10px 10px;
-  color: red;
-  height: 100%;
+  border-radius: 5px;
 `;
 const Navbar = () => {
+  const navigate = useNavigate();
   return (
     <NavStyle1>
-      <LogoStyle1 to={"/"}>Netflix</LogoStyle1>
+      <LogoStyle onClick={() => navigate("/")}>Netflix</LogoStyle>
       <RightSection>
-        <LoginStyle1 to="/login">로그인</LoginStyle1>
-        <SignStyle1 to="/signup">회원가입</SignStyle1>
+        <LoginStyle onClick={() => navigate("/login")}>로그인</LoginStyle>
+        <SignStyle onClick={() => navigate("/signup")}>회원가입</SignStyle>
       </RightSection>
     </NavStyle1>
   );
