@@ -80,12 +80,24 @@ const SignUpPage = () => {
     <SignUpContainer>
       <SignText style={{ color: "white" }}>회원가입</SignText>
       <FormContainer onSubmit={handleSubmit(onSubmit)}>
-        <InputText type="email" {...register("email")} />
-        <p style={{ color: "white" }}>{errors.email?.message}</p>
-        <InputText type="password" {...register("password")} />
-        <p style={{ color: "white" }}>{errors.password?.message}</p>
-        <InputText type="password" {...register("password")} />
-        <p style={{ color: "white" }}>{errors.password?.message}</p>
+        <InputText
+          type="email"
+          placeholder="이메일을 입력해주세요!"
+          {...register("email")}
+        />
+        <p style={{ color: "red" }}>{errors.email?.message}</p>
+        <InputText
+          type="password"
+          placeholder="비밀번호를 입력해주세요!"
+          {...register("password")}
+        />
+        <p style={{ color: "red" }}>{errors.password?.message}</p>
+        <InputText
+          type="password"
+          placeholder="비밀번호를 다시 입력해주세요!"
+          {...register("password")}
+        />
+        <p style={{ color: "red" }}>{errors.password?.message}</p>
         <SubmitText type="submit" value={"전송"} />
       </FormContainer>
     </SignUpContainer>

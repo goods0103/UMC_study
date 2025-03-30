@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 const NavStyle1 = styled.nav`
   background-color: #333333;
   width: 100%;
-  height: 8vh;
+  height: 4vh;
   display: flex;
   text-align: center;
   justify-content: space-between;
