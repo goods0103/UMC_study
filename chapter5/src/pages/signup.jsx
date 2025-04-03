@@ -1,7 +1,10 @@
-import { useForm } from "react-hook-form";
+///import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styled from "styled-components";
+import { useState } from "react";
+import useForm from "../hooks/use-form";
+import { validateLogin } from "../utils/validate";
 
 //yup이라는 유효성 검사 라이브러리 사용
 const SignUpContainer = styled.div`
@@ -36,7 +39,11 @@ const InputText = styled.input`
   font-size: 1em;
   width: 38vh;
   height: 4vh;
-  border-radius: 10px;
+  border-radius: 4px;
+  border: ${(props) => (props.error ? "4px solid red" : "1px solid #ccc")};
+  &:focus {
+    border-color: #007bff;
+  }
 `;
 
 const SubmitText = styled.input`
@@ -53,52 +60,64 @@ const SubmitText = styled.input`
   background-color: rgb(230, 9, 101);
 `;
 
+const ErrorText = styled.h1`
+  color: red;
+  font-size: 12px;
+`;
+
 const SignUpPage = () => {
-  const schema = yup.object().shape({
-    email: yup.string().email().required("이메일을 반드시 입력해주세요"),
-    password: yup
-      .string()
-      .min(8, "비밀번호는 8자리 이상이여야 합니다")
-      .max(16, "비밀번호는 16자리 미만이여야 합니다")
-      .required(),
+  // const schema = yup.object().shape({
+  //   email: yup.string().email().required("이메일을 반드시 입력해주세요"),
+  //   password: yup
+  //     .string()
+  //     .min(8, "비밀번호는 8자리 이상이여야 합니다")
+  //     .max(16, "비밀번호는 16자리 미만이여야 합니다")
+  //     .required(),
+  // });
+
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm({
+  //   resolver: yupResolver(schema),
+  // });
+
+  // const onSubmit = (data) => {
+  //   console.log("폼 데이터 제출");
+  //   console.log(data);
+  // };
+  const login = useForm({
+    initialValue: {
+      email: "",
+      password: "",
+    },
+    validate: validateLogin,
   });
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
-
-  const onSubmit = (data) => {
-    console.log("폼 데이터 제출");
-    console.log(data);
-  };
-
+  console.log(login.values, login.errors, login.touched);
   return (
     <SignUpContainer>
       <SignText style={{ color: "white" }}>회원가입</SignText>
-      <FormContainer onSubmit={handleSubmit(onSubmit)}>
+      <FormContainer>
         <InputText
-          type="email"
-          placeholder="이메일을 입력해주세요!"
-          {...register("email")}
+          error={login.touched.email && login.errors.email}
+          type={"email"}
+          placeholder="이메일을 입력해주세요"
+          {...login.getTextIputProps("email")}
         />
-        <p style={{ color: "red" }}>{errors.email?.message}</p>
+        {login.touched.email && login.errors.email && (
+          <ErrorText>{login.errors.email}</ErrorText>
+        )}
         <InputText
-          type="password"
-          placeholder="비밀번호를 입력해주세요!"
-          {...register("password")}
+          error={login.touched.password && login.errors.password}
+          type={"password"}
+          placeholder="비밀번호를 입력해주세요"
+          {...login.getTextIputProps("password")}
         />
-        <p style={{ color: "red" }}>{errors.password?.message}</p>
-        <InputText
-          type="password"
-          placeholder="비밀번호를 다시 입력해주세요!"
-          {...register("password")}
-        />
-        <p style={{ color: "red" }}>{errors.password?.message}</p>
-        <SubmitText type="submit" value={"전송"} />
+        {login.touched.password && login.errors.password && (
+          <ErrorText>{login.errors.password}</ErrorText>
+        )}
       </FormContainer>
     </SignUpContainer>
   );
