@@ -4,6 +4,7 @@ function validateUser(values) {
   const errors = {
     email: "",
     password: "",
+    checkpw: "",
   };
 
   if (emailPattern.test(values.email) === false) {
@@ -12,6 +13,10 @@ function validateUser(values) {
 
   if (values.password.length < 8 || values.password.length > 16) {
     errors.password = "비밀번호는 8 ~ 16자 사이로 입력해주세요.";
+  }
+
+  if (values.password !== values.checkpw) {
+    errors.checkpw = "비밀번호가 일치하지 않습니다!";
   }
 
   return errors;

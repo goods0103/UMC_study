@@ -9,7 +9,7 @@ function useForm({ initialValue, validate }) {
       ...values,
       [name]: value,
     });
-    console.log(values);
+    // console.log(values);
   };
 
   const handleBlur = (name) => {
@@ -17,7 +17,7 @@ function useForm({ initialValue, validate }) {
       ...touched,
       [name]: true,
     });
-    console.log(touched);
+    // console.log(touched);
   };
 
   const getTextIputProps = (name) => {
@@ -31,7 +31,7 @@ function useForm({ initialValue, validate }) {
   useEffect(() => {
     const newErrors = validate(values);
     setErrors(newErrors);
-    console.log(newErrors);
+    // console.log(newErrors);
   }, [validate, values]);
 
   return { values, errors, touched, getTextIputProps };

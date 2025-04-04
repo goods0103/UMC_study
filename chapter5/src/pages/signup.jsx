@@ -22,6 +22,7 @@ const FormContainer = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1em;
 `;
 
 const SignText = styled.div`
@@ -91,15 +92,16 @@ const SignUpPage = () => {
     initialValue: {
       email: "",
       password: "",
+      checkpw: "",
     },
     validate: validateLogin,
   });
 
-  console.log(login.values, login.errors, login.touched);
+  // console.log(login.values, login.errors, login.touched);
   return (
     <SignUpContainer>
       <SignText style={{ color: "white" }}>회원가입</SignText>
-      <FormContainer>
+      <FormContainer noValidate>
         <InputText
           error={login.touched.email && login.errors.email}
           type={"email"}
@@ -118,6 +120,16 @@ const SignUpPage = () => {
         {login.touched.password && login.errors.password && (
           <ErrorText>{login.errors.password}</ErrorText>
         )}
+        <InputText
+          error={login.touched.checkpw && login.errors.checkpw}
+          type={"password"}
+          placeholder="비밀번호를 다시 입력해주세요"
+          {...login.getTextIputProps("checkpw")}
+        />
+        {login.touched.checkpw && login.errors.checkpw && (
+          <ErrorText>{login.errors.checkpw}</ErrorText>
+        )}
+        <SubmitText type="submit" value={"제출"} />
       </FormContainer>
     </SignUpContainer>
   );

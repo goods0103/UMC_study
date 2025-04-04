@@ -18,9 +18,11 @@ const FormContainer = styled.form`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 1em;
 `;
 
 const LoginText = styled.div`
+  color: white;
   font-weight: bold;
   font-family: "Poppins", sans-serif;
   display: flex;
@@ -52,6 +54,11 @@ const SubmitText = styled.input`
   background-color: rgb(230, 9, 101);
 `;
 
+const ErrorText = styled.h1`
+  color: red;
+  font-size: 12px;
+`;
+
 const LoginPage = () => {
   const schema = yup.object().shape({
     email: yup
@@ -69,30 +76,32 @@ const LoginPage = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) });
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   const onSubmit = (data) => {
-    console.log("formdata  전송완료");
     console.log(data);
   };
 
   return (
     <LoginContainer>
-      <LoginText style={{ color: "white" }}>로그인</LoginText>
+      <LoginText>로그인</LoginText>
       <FormContainer onSubmit={handleSubmit(onSubmit)} noValidate>
         <InputText
           type="email"
-          placeholder=" email을 입력해주세요!"
+          placeholder="이메일을 입력해주세요!"
           {...register("email")}
-        />
-        <p style={{ color: "red" }}>{errors.email?.message}</p>
+        ></InputText>
+        {errors.email && <ErrorText>{errors.email.message}</ErrorText>}
         <InputText
+          onBlur={() => handleBlur("password")}
           type="password"
-          placeholder=" password를 입력해주세요!"
+          placeholder="비밀번호를 입력해주세요!"
           {...register("password")}
-        />
-        <p style={{ color: "red" }}>{errors.password?.message}</p>
-        <SubmitText type="submit" value={"로그인"} />
+        ></InputText>
+        {errors.password && <ErrorText>{errors.password.message}</ErrorText>}
+        <SubmitText type="submit" value={"로그인"}></SubmitText>
       </FormContainer>
     </LoginContainer>
   );
