@@ -2,9 +2,10 @@
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useForm from "../hooks/use-form";
 import { validateLogin } from "../utils/validate";
+import axios from "axios";
 
 //yup이라는 유효성 검사 라이브러리 사용
 const SignUpContainer = styled.div`
@@ -97,7 +98,25 @@ const SignUpPage = () => {
     validate: validateLogin,
   });
 
-  // console.log(login.values, login.errors, login.touched);
+  const userData = {
+    email: login?.values.email,
+    password: login?.values.password,
+    passwordCheck: login?.values.checkpw,
+  };
+
+  //signup Post요청날리기
+  useEffect(() => {}, []);
+
+  const handleSubmit = async () => {
+    e.preventDefault();
+    const req = await axios.post(
+      "http://localhost:3000/auth/register",
+      userData
+    );
+    handleSubmit();
+    console.log(req);
+  };
+
   return (
     <SignUpContainer>
       <SignText style={{ color: "white" }}>회원가입</SignText>
@@ -129,7 +148,11 @@ const SignUpPage = () => {
         {login.touched.checkpw && login.errors.checkpw && (
           <ErrorText>{login.errors.checkpw}</ErrorText>
         )}
-        <SubmitText type="submit" value={"제출"} />
+        <SubmitText
+          onClick={() => handleSubmit()}
+          type="submit"
+          value={"제출"}
+        />
       </FormContainer>
     </SignUpContainer>
   );
