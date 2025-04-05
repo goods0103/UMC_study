@@ -1,12 +1,12 @@
+import { useContext } from "react";
 import { Button } from "react-bootstrap";
+import { TodoContext } from "../../context/TodoContext";
 
-const UpdateButton = ({
-  editingId,
-  id,
-  seteditingId,
-  updateTodo,
-  editText,
-}) => {
+const UpdateButton = ({ id }) => {
+  const { editingId, seteditingId, updateTodo, editText } =
+    useContext(TodoContext);
+  // console.log(id);
+  // console.log(editingId);
   return (
     <>
       {editingId === id ? (
