@@ -120,7 +120,8 @@ const SignUpPage = () => {
       console.log(res.status);
       res.status == 201 && navigate("/login");
     } catch (e) {
-      console.error("에러: ", e.response.data);
+      //console.error("에러: ", e.response.data);
+      alert(e.response.data.message);
       console.log(userData);
       login.resetForm();
     } finally {

@@ -2,6 +2,8 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const LoginContainer = styled.div`
   width: 100%;
@@ -68,20 +70,33 @@ const LoginPage = () => {
     password: yup
       .string()
       .required("비밀번호를 입력해주세요!")
-      .min(8, "비밀번호는 8~16자 사이로 입력해주세요!")
-      .max(16, "비밀번호는 8~16자 사이로 입력해주세요!"),
+      .min(1, "비밀번호는 1~3자 사이로 입력해주세요!")
+      .max(3, "비밀번호는 1~3자 사이로 입력해주세요!"),
   });
+
+  const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    try {
+      const res = await axios.post("http://localhost:3000/auth/login", data);
+      console.log(res.data);
+      console.log(res.status);
+      res.status == 201 && navigate("/");
+    } catch (e) {
+      // console.log("에러 : ", e.response.data);
+      alert(e.response.data.message);
+      reset();
+    } finally {
+    }
   };
 
   return (
