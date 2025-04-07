@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import useForm from "../hooks/use-form";
 import { validateLogin } from "../utils/validate";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 //yup이라는 유효성 검사 라이브러리 사용
 const SignUpContainer = styled.div`
@@ -98,6 +99,8 @@ const SignUpPage = () => {
     validate: validateLogin,
   });
 
+  const navigate = useNavigate();
+
   const userData = {
     email: login?.values.email,
     password: login?.values.password,
@@ -105,22 +108,29 @@ const SignUpPage = () => {
   };
 
   //signup Post요청날리기
-  useEffect(() => {}, []);
-
-  const handleSubmit = async () => {
-    e.preventDefault();
-    const req = await axios.post(
-      "http://localhost:3000/auth/register",
-      userData
-    );
-    handleSubmit();
-    console.log(req);
+  const handleSubmit = async (e) => {
+    try {
+      e.preventDefault();
+      const res = await axios.post(
+        "http://localhost:3000/auth/register",
+        userData
+      );
+      console.log(userData);
+      console.log(res.data);
+      console.log(res.status);
+      res.status == 201 && navigate("/login");
+    } catch (e) {
+      console.error("에러: ", e.response.data);
+      console.log(userData);
+      login.resetForm();
+    } finally {
+    }
   };
 
   return (
     <SignUpContainer>
       <SignText style={{ color: "white" }}>회원가입</SignText>
-      <FormContainer noValidate>
+      <FormContainer onSubmit={handleSubmit} noValidate>
         <InputText
           error={login.touched.email && login.errors.email}
           type={"email"}
@@ -148,11 +158,7 @@ const SignUpPage = () => {
         {login.touched.checkpw && login.errors.checkpw && (
           <ErrorText>{login.errors.checkpw}</ErrorText>
         )}
-        <SubmitText
-          onClick={() => handleSubmit()}
-          type="submit"
-          value={"제출"}
-        />
+        <SubmitText type="submit" value={"제출"} />
       </FormContainer>
     </SignUpContainer>
   );

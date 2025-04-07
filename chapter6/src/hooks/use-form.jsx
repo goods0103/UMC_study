@@ -34,6 +34,13 @@ function useForm({ initialValue, validate }) {
     // console.log(newErrors);
   }, [validate, values]);
 
-  return { values, errors, touched, getTextIputProps };
+  // reset
+  const resetForm = () => {
+    setValues(initialValue);
+    setTouched({});
+    setErrors({});
+  };
+
+  return { values, errors, touched, getTextIputProps, resetForm };
 }
 export default useForm;
