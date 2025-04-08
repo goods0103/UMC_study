@@ -85,12 +85,19 @@ const LoginPage = () => {
     resolver: yupResolver(schema),
   });
 
+  const saveUserToken = ({ res, data }) => {
+    //로컬스토리지에 저장 key == id
+    const idKey = data.email.split("@")[0];
+    localStorage.setItem(idKey, JSON.stringify(res.data));
+    navigate("/");
+  };
+
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("http://localhost:3000/auth/login", data);
       console.log(res.data);
       console.log(res.status);
-      res.status == 201 && navigate("/");
+      res.status == 201 && saveUserToken({ res, data });
     } catch (e) {
       // console.log("에러 : ", e.response.data);
       alert(e.response.data.message);
