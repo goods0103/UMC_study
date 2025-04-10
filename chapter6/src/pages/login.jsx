@@ -4,6 +4,8 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useContext, useEffect } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const LoginContainer = styled.div`
   width: 100%;
@@ -76,6 +78,8 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
+  const { isLogin, setIsLogin } = useContext(AuthContext);
+
   const {
     register,
     handleSubmit,
@@ -89,6 +93,7 @@ const LoginPage = () => {
     //로컬스토리지에 저장 key == id
     const idKey = data.email.split("@")[0];
     localStorage.setItem(idKey, JSON.stringify(res.data));
+    setIsLogin(true);
     navigate("/");
   };
 
