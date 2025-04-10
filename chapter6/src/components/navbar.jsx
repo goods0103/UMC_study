@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
 //navbar style
 const NavStyle1 = styled.nav`
   background-color: #333333;
@@ -15,7 +17,7 @@ const NavStyle1 = styled.nav`
 const LogoStyle = styled.div`
   color: #e50914;
   font-weight: bold;
-  font-size: 21px;
+  font-size: 1em;
   padding: 1em;
 `;
 
@@ -47,14 +49,31 @@ const SignStyle = styled.button`
   border-radius: 5px;
 `;
 const Navbar = () => {
+  const { isLogin, idKey, setIsLogin, userName } = useContext(AuthContext);
+
   const navigate = useNavigate();
   return (
     <NavStyle1>
       <LogoStyle onClick={() => navigate("/")}>Netflix</LogoStyle>
-      <RightSection>
-        <LoginStyle onClick={() => navigate("/login")}>로그인</LoginStyle>
-        <SignStyle onClick={() => navigate("/signup")}>회원가입</SignStyle>
-      </RightSection>
+      {isLogin == true ? (
+        <RightSection>
+          <LoginStyle>{userName}님 반갑습니다</LoginStyle>
+          <LoginStyle
+            onClick={() => {
+              navigate("/");
+              setIsLogin(false);
+              localStorage.removeItem(idKey);
+            }}
+          >
+            로그아웃
+          </LoginStyle>
+        </RightSection>
+      ) : (
+        <RightSection>
+          <LoginStyle onClick={() => navigate("/login")}>로그인</LoginStyle>
+          <SignStyle onClick={() => navigate("/signup")}>회원가입</SignStyle>
+        </RightSection>
+      )}
     </NavStyle1>
   );
 };

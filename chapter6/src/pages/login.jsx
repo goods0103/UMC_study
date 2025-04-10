@@ -4,7 +4,7 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useContext, useEffect } from "react";
+import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 const LoginContainer = styled.div`
@@ -78,7 +78,7 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  const { isLogin, setIsLogin } = useContext(AuthContext);
+  const { idKey, setIdKey, setIsLogin, setUserName } = useContext(AuthContext);
 
   const {
     register,
@@ -91,20 +91,50 @@ const LoginPage = () => {
 
   const saveUserToken = ({ res, data }) => {
     //로컬스토리지에 저장 key == id
-    const idKey = data.email.split("@")[0];
-    localStorage.setItem(idKey, JSON.stringify(res.data));
-    setIsLogin(true);
-    navigate("/");
+    const key = data.email.split("@")[0];
+    localStorage.setItem(key, JSON.stringify(res.data));
+    setIdKey(key);
   };
+
+  useEffect(() => {
+    if (idKey) {
+      const setUser = async () => {
+        try {
+          console.log("idKey: ", idKey);
+          const Authheader = `Bearer ${
+            JSON.parse(localStorage.getItem(idKey)).accessToken
+          }`;
+
+          const res = await axios.get("http://localhost:3000/user/me", {
+            headers: {
+              Authorization: Authheader,
+            },
+          });
+          if (res.status == 200) {
+            console.log(res.data.email);
+            setUserName(res.data.email);
+          }
+        } catch (e) {
+          console.log("error :", e.response);
+        } finally {
+        }
+      };
+      setUser();
+    }
+  }, [idKey]);
 
   const onSubmit = async (data) => {
     try {
       const res = await axios.post("http://localhost:3000/auth/login", data);
-      console.log(res.data);
-      console.log(res.status);
-      res.status == 201 && saveUserToken({ res, data });
+      // console.log(res.data);
+      // console.log(res.status);
+      if (res.status == 201) {
+        saveUserToken({ res, data });
+        setIsLogin(true);
+        navigate("/");
+      }
     } catch (e) {
-      // console.log("에러 : ", e.response.data);
+      console.log("에러 : ", e.response.data);
       alert(e.response.data.message);
       reset();
     } finally {
