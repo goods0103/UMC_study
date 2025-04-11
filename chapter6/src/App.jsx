@@ -5,7 +5,7 @@ import NotFound from "./pages/not-found";
 import RootLayout from "./layout/root-layout";
 import LoginPage from "./pages/login";
 import SignUpPage from "./pages/signup";
-import SearchPage from "./pages/search";
+import SearchPage from "./pages/Search/search";
 import CategoryPage from "./pages/category";
 import NowPlaying from "./pages/nowPlaying";
 import Popular from "./pages/popular";

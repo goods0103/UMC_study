@@ -12,19 +12,19 @@ const CardBody = styled.div`
   align-items: flex-start;
 `;
 const ImgStyle1 = styled.img`
-  width: 200px;
+  width: 100%;
   height: 300px;
   object-fit: cover; /* 비율 유지하면서 꽉 채움 */
   border-radius: 10px;
 `;
 
 const MovieInfo1 = styled.div`
-  width: 200px;
+  width: 100%;
   color: white;
 `;
 
 const CardBox = styled(Link)`
-  width: 200px;
+  width: 100%;
   height: 400px;
 `;
 
