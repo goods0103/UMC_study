@@ -1,9 +1,33 @@
-import { useContext } from "react";
-import { AuthContext } from "../context/AuthContext";
+import Card from "../components/card";
+import useCustomFetch from "../hooks/useCustomFetch";
+import Loading from "../components/loading";
+import Error from "../components/error";
+
 const HomePage = () => {
+  const {
+    data: movies,
+    isLoading,
+    isError,
+  } = useCustomFetch("/movie/popular?language=ko-KR");
+
+  if (isLoading) {
+    return (
+      <>
+        <Loading></Loading>
+      </>
+    );
+  }
+
+  if (isError) {
+    return (
+      <>
+        <Error></Error>
+      </>
+    );
+  }
   return (
     <>
-      <h1 color="red">홈 페이지1</h1>
+      <Card movies={movies} />
     </>
   );
 };

@@ -8,7 +8,7 @@ import axios from "axios";
 const NavStyle1 = styled.nav`
   background-color: #333333;
   width: 100%;
-  height: 4vh;
+  height: 6vh;
   display: flex;
   text-align: center;
   justify-content: space-between;
@@ -17,8 +17,8 @@ const NavStyle1 = styled.nav`
 const LogoStyle = styled.div`
   color: #e50914;
   font-weight: bold;
-  font-size: 1em;
-  padding: 1em;
+  font-size: 1rem;
+  padding: 1rem;
 `;
 
 const RightSection = styled.div`
