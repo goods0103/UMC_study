@@ -15,7 +15,7 @@ const SearchMovieList = () => {
   console.log(movies);
 
   if (isLoading === true) {
-    return <h1 color="white">로딩 중</h1>;
+    return <h1 color="white">로딩 중임</h1>;
   }
 
   if (mq && movies.data?.results.length === 0) {
