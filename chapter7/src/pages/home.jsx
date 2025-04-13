@@ -8,8 +8,8 @@ const HomePage = () => {
     data: movies,
     isLoading,
     isError,
-  } = useCustomFetch("/movie/popular?language=ko-KR");
-
+  } = useCustomFetch("/movie/popular?language=ko-KR", "Home");
+  console.log(movies);
   if (isLoading) {
     return (
       <>

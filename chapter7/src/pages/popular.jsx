@@ -9,7 +9,7 @@ const Popular = () => {
     data: movies,
     isLoading,
     isError,
-  } = useCustomFetch("/movie/popular?language=ko-KR");
+  } = useCustomFetch("/movie/popular?language=ko-KR", "popular");
 
   if (isLoading) {
     return (

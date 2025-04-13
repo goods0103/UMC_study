@@ -73,7 +73,10 @@ const MovieDetail = () => {
     data: movie,
     isLoading,
     isError,
-  } = useCustomFetch(`/movie/${params.movieId}?language=ko-KR`);
+  } = useCustomFetch(
+    `/movie/${params.movieId}?language=ko-KR`,
+    `${params.movieId}`
+  );
 
   const { data: cast } = useCustomFetch(
     `/movie/${params.movieId}/credits?language=ko-KR`

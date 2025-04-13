@@ -9,7 +9,7 @@ const TopRated = () => {
     data: movies,
     isLoading,
     isError,
-  } = useCustomFetch("/movie/top_rated?language=ko-KR");
+  } = useCustomFetch("/movie/top_rated?language=ko-KR", "topRated");
 
   if (isLoading) {
     return (

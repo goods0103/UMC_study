@@ -9,7 +9,7 @@ const UpComming = () => {
     data: movies,
     isLoading,
     isError,
-  } = useCustomFetch("/movie/upcoming?language=ko-KR");
+  } = useCustomFetch("/movie/upcoming?language=ko-KR", "upComming");
 
   if (isLoading) {
     return (

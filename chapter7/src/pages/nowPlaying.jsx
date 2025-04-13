@@ -9,7 +9,7 @@ const NowPlaying = () => {
     data: movies,
     isLoading,
     isError,
-  } = useCustomFetch("/movie/now_playing?language=ko-KR");
+  } = useCustomFetch("/movie/now_playing?language=ko-KR", "nowPlaying");
 
   if (isLoading) {
     return (

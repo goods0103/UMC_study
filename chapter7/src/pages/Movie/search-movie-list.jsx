@@ -12,7 +12,7 @@ const SearchMovieList = () => {
 
   const url = `https://api.themoviedb.org/3/search/movie?query=${mq}&include_adult=false&language=ko-KR&page=1`;
 
-  const { data: movies, isLoading, isError } = useCustomFetch(url);
+  const { data: movies, isLoading, isError } = useCustomFetch(url, `${mq}`);
   console.log(movies);
 
   if (isLoading) {
