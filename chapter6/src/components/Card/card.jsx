@@ -11,6 +11,12 @@ const CardBody = styled.div`
   gap: clamp(10px, 2vw, 20px); // 최소 10px, 최대 30px, 화면 너비에 따라
   align-items: flex-start;
 `;
+
+const CardBox = styled(Link)`
+  width: 100%;
+  height: 400px;
+`;
+
 const ImgStyle1 = styled.img`
   width: 100%;
   height: 300px;
@@ -21,11 +27,6 @@ const ImgStyle1 = styled.img`
 const MovieInfo1 = styled.div`
   width: 100%;
   color: white;
-`;
-
-const CardBox = styled(Link)`
-  width: 100%;
-  height: 400px;
 `;
 
 const Card = ({ movies }) => {
