@@ -9,7 +9,12 @@ const NowPlaying = () => {
     data: movies,
     isLoading,
     isError,
-  } = useCustomFetch("/movie/now_playing?language=ko-KR", "nowPlaying");
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useCustomFetch("/movie/now_playing?language=ko-KR", "nowPlaying", {
+    isInfinite: true,
+  });
 
   if (isLoading) {
     return (
@@ -26,7 +31,17 @@ const NowPlaying = () => {
       </>
     );
   }
-
-  return <>{<Card movies={movies} />}</>;
+  console.log(movies);
+  console.log("hasNextPage:", hasNextPage);
+  console.log("isFetchingNextPage:", isFetchingNextPage);
+  return (
+    <>
+      {<Card movies={movies} />}
+      <button color="yellow" onClick={() => fetchNextPage()}>
+        {" "}
+        더 보기{" "}
+      </button>
+    </>
+  );
 };
 export default NowPlaying;
