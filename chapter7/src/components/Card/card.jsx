@@ -32,7 +32,8 @@ const MovieInfo1 = styled.div`
 const Card = ({ movies }) => {
   return (
     <CardBody>
-      {movies.data?.results.map((movies) => (
+      {movies?.results.map((movies) => (
+        // {movies.data?.results.map((movies) => (
         <CardBox to={`/movies/${movies.id}`} key={movies.id}>
           <ImgStyle1
             src={`https://image.tmdb.org/t/p/w200/${movies.poster_path}`}
