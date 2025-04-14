@@ -13,7 +13,6 @@ const MainContent = styled.div`
   flex-direction: column;
   padding: 20px;
   display: flex;
-  flex-wrap: wrap;
   gap: 50px 20px;
   background-color: #1c1c1c;
   overflow-y: auto;
