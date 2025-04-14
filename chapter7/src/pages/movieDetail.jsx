@@ -79,7 +79,8 @@ const MovieDetail = () => {
   );
 
   const { data: cast } = useCustomFetch(
-    `/movie/${params.movieId}/credits?language=ko-KR`
+    `/movie/${params.movieId}/credits?language=ko-KR`,
+    "castData"
   );
 
   if (isLoading) {
