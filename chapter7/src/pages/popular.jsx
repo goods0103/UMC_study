@@ -8,6 +8,7 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
 import styled from "styled-components";
+import * as C from "../components/Card/cardWrapper.style";
 
 const LoadingTag = styled.div`
   display: flex;
@@ -62,9 +63,12 @@ const Popular = () => {
   // }
   return (
     <>
-      {movies?.pages.map((page, idx) => {
-        return <Card key={idx} movies={page} />;
-      })}
+      <C.CardsWrapper>
+        {movies?.pages.map((page, idx) => {
+          return <Card key={idx} movies={page} />;
+        })}
+        {isFetching && <CardListSkeleton number={20} />}
+      </C.CardsWrapper>
       <LoadingTag ref={ref}>
         <ClipLoader color="#fff" />
       </LoadingTag>
