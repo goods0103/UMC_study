@@ -1,19 +1,24 @@
 import Card from "../components/Card/card";
-import useCustomFetch from "../hooks/useCustomFetch";
-import Loading from "../components/loading";
 import Error from "../components/error";
+import { useGetMovies } from "../hooks/Queries/useGetMovies";
+import { useQuery } from "@tanstack/react-query";
+import CardListSkeleton from "../components/Card/Skeleton/card-list-skeleton";
 
 const HomePage = () => {
   const {
     data: movies,
-    isLoading,
+    isPending,
     isError,
-  } = useCustomFetch("/movie/popular?language=ko-KR", "Home");
-  console.log(movies);
-  if (isLoading) {
+  } = useQuery({
+    queryFn: () => useGetMovies({ category: "popular", pageParam: 1 }),
+    queryKey: ["home", "popular"],
+    cacheTime: 100000,
+    staleTime: 100000,
+  });
+  if (isPending) {
     return (
       <>
-        <Loading></Loading>
+        <CardListSkeleton number={20}></CardListSkeleton>
       </>
     );
   }

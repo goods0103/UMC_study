@@ -4,6 +4,8 @@ import styled from "styled-components";
 import Loading from "../components/loading";
 import Error from "../components/error";
 import CastCard from "../components/castCard";
+import { useQuery } from "@tanstack/react-query";
+import { useGetMovies } from "../hooks/Queries/useGetMovies";
 
 const DetailWrapper = styled.div`
   display: grid;
@@ -69,21 +71,35 @@ const ContentStyle = styled.div`
 
 const MovieDetail = () => {
   const params = useParams();
+  // const {
+  //   data: movie,
+  //   isLoading,
+  //   isError,
+  // } = useCustomFetch(
+  //   `/movie/${params.movieId}?language=ko-KR`,
+  //   `${params.movieId}`
+  // );
+
   const {
     data: movie,
-    isLoading,
+    isPending,
     isError,
-  } = useCustomFetch(
-    `/movie/${params.movieId}?language=ko-KR`,
-    `${params.movieId}`
-  );
+  } = useQuery({
+    queryFn: () => useGetMovies({ category: params?.movieId, pageParam: 1 }),
+    queryKey: ["movieDetail", params?.movieId],
+  });
 
-  const { data: cast } = useCustomFetch(
-    `/movie/${params.movieId}/credits?language=ko-KR`,
-    "castData"
-  );
+  // const { data: cast } = useCustomFetch(
+  //   `/movie/${params.movieId}/credits?language=ko-KR`,
+  //   "castData"
+  // );
 
-  if (isLoading) {
+  const { data: cast } = useQuery({
+    queryFn: () =>
+      useGetMovies({ category: `${params?.movieId}/credits`, pageParam: 1 }),
+    queryKey: ["credits", params?.movieId],
+  });
+  if (isPending) {
     return (
       <>
         <Loading></Loading>
@@ -99,16 +115,16 @@ const MovieDetail = () => {
     );
   }
 
-  console.log(cast.data);
+  console.log(cast);
   return (
     <DetailWrapper>
-      <DetailHead $imgpath={movie.data?.backdrop_path}>
-        <TitleStyle>{movie.data?.original_title}</TitleStyle>
-        <SubTitleStyle>{movie.data?.release_date}</SubTitleStyle>
-        <SubTitleStyle>{`평점 ${movie.data?.vote_average}`}</SubTitleStyle>
-        <SubTitleStyle>{`${movie.data?.runtime}분`}</SubTitleStyle>
-        <SubTitleStyle>{movie.data?.tagline}</SubTitleStyle>
-        <ContentStyle>{movie.data?.overview}</ContentStyle>
+      <DetailHead $imgpath={movie?.backdrop_path}>
+        <TitleStyle>{movie?.original_title}</TitleStyle>
+        <SubTitleStyle>{movie?.release_date}</SubTitleStyle>
+        <SubTitleStyle>{`평점 ${movie?.vote_average}`}</SubTitleStyle>
+        <SubTitleStyle>{`${movie?.runtime}분`}</SubTitleStyle>
+        <SubTitleStyle>{movie?.tagline}</SubTitleStyle>
+        <ContentStyle>{movie?.overview}</ContentStyle>
       </DetailHead>
       <DetailBody>
         <TitleStyle>감독/출연</TitleStyle>

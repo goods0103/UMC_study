@@ -36,7 +36,7 @@ const ImgInfo = styled.div`
 const CastCard = ({ cast }) => {
   return (
     <ImgBody>
-      {cast.data?.cast.map((casts) => (
+      {cast?.cast.map((casts) => (
         <ImgBox key={casts.id}>
           <ImgStyle
             src={`https://image.tmdb.org/t/p/w200/${casts.profile_path}`}

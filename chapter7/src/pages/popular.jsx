@@ -7,6 +7,12 @@ import { useGetInfiniteMovies } from "../hooks/Queries/useGetInfiniteMovies";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { ClipLoader } from "react-spinners";
+import styled from "styled-components";
+
+const LoadingTag = styled.div`
+  display: flex;
+  margin: 0 auto;
+`;
 
 const Popular = () => {
   // const {
@@ -59,9 +65,9 @@ const Popular = () => {
       {movies?.pages.map((page, idx) => {
         return <Card key={idx} movies={page} />;
       })}
-      <div ref={ref}>
+      <LoadingTag ref={ref}>
         <ClipLoader color="#fff" />
-      </div>
+      </LoadingTag>
     </>
   );
 };
