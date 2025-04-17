@@ -1,8 +1,5 @@
 import Card from "../components/Card/card";
-import Error from "../components/error";
 import CardListSkeleton from "../components/Card/Skeleton/card-list-skeleton";
-import { useGetMovies } from "../hooks/Queries/useGetMovies";
-import { useQuery } from "@tanstack/react-query";
 import { useGetInfiniteMovies } from "../hooks/Queries/useGetInfiniteMovies";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
@@ -35,7 +32,7 @@ const Popular = () => {
     fetchNextPage,
     isFetchingNextPage,
     isError,
-  } = useGetInfiniteMovies("now_playing");
+  } = useGetInfiniteMovies("popular");
 
   const { ref, inView } = useInView({
     threshold: 1,
@@ -61,8 +58,6 @@ const Popular = () => {
   //     </>
   //   );
   // }
-  console.log(movies);
-  console.log("isFetching:", isFetching);
   return (
     <>
       {/* <C.CardsWrapper>
@@ -72,9 +67,12 @@ const Popular = () => {
         {isFetching && <CardListSkeleton number={20} />}
       </C.CardsWrapper> */}
       <C.CardsWrapper>
-        {movies?.pages.flatMap((page, _) =>
-          page.results.map((movie) => <Card key={movie.id} movie={movie} />)
-        )}
+        {movies?.pages
+          .map((page, _) => page.results)
+          .flat()
+          .map((movie) => (
+            <Card key={movie.id} movie={movie} />
+          ))}
         {isFetching && <CardListSkeleton number={20} />}
       </C.CardsWrapper>
       <LoadingTag ref={ref}>

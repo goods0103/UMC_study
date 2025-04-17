@@ -9,7 +9,8 @@ function useGetInfiniteMovies(category) {
     getNextPageParam: (lastPage, allPages) => {
       //   const lastMovie = lastPage.results[lastPage.results.length - 1];
       const lastMovie = lastPage.results.at(-1);
-
+      console.log(lastPage);
+      console.log(allPages);
       return lastMovie ? allPages?.length + 1 : undefined;
     },
   });

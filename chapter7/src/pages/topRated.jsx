@@ -1,35 +1,51 @@
 import Card from "../components/Card/card";
-import useCustomFetch from "../hooks/useCustomFetch";
-import Loading from "../components/loading";
-import Error from "../components/error";
 import CardListSkeleton from "../components/Card/Skeleton/card-list-skeleton";
+import { useGetInfiniteMovies } from "../hooks/Queries/useGetInfiniteMovies";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
+import { ClipLoader } from "react-spinners";
+import styled from "styled-components";
+import * as C from "../components/Card/cardWrapper.style";
+
+const LoadingTag = styled.div`
+  display: flex;
+  margin: 0 auto;
+`;
 
 const TopRated = () => {
   const {
     data: movies,
-    isLoading,
     isError,
-  } = useCustomFetch("/movie/top_rated?language=ko-KR", "topRated");
+    isFetching,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useGetInfiniteMovies("top_rated");
 
-  if (isLoading) {
-    return (
-      <>
-        <CardListSkeleton number={20} />
-      </>
-    );
-  }
+  const { ref, inView } = useInView({
+    threshold: 1,
+  });
 
-  if (isError) {
-    return (
-      <>
-        <Error></Error>
-      </>
-    );
-  }
+  useEffect(() => {
+    if (inView) {
+      !isFetching && hasNextPage && fetchNextPage();
+    }
+  }, [inView, isFetching, hasNextPage, fetchNextPage]);
 
   return (
     <>
-      <Card movies={movies} />
+      <C.CardsWrapper>
+        {movies?.pages
+          .map((page, _) => page.results)
+          .flat()
+          .map((movie) => (
+            <Card key={movie.id} movie={movie} />
+          ))}
+        {isFetching && <CardListSkeleton number={20} />}
+      </C.CardsWrapper>
+      <LoadingTag ref={ref}>
+        <ClipLoader color="#fff" />
+      </LoadingTag>
     </>
   );
 };

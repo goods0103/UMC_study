@@ -3,6 +3,7 @@ import Error from "../components/error";
 import { useGetMovies } from "../hooks/Queries/useGetMovies";
 import { useQuery } from "@tanstack/react-query";
 import CardListSkeleton from "../components/Card/Skeleton/card-list-skeleton";
+import * as C from "../components/Card/cardWrapper.style";
 
 const HomePage = () => {
   const {
@@ -17,9 +18,9 @@ const HomePage = () => {
   });
   if (isPending) {
     return (
-      <>
+      <C.CardsWrapper>
         <CardListSkeleton number={20}></CardListSkeleton>
-      </>
+      </C.CardsWrapper>
     );
   }
 
@@ -31,9 +32,11 @@ const HomePage = () => {
     );
   }
   return (
-    <>
-      <Card movies={movies} />
-    </>
+    <C.CardsWrapper>
+      {movies.results.map((movie, idx) => (
+        <Card key={movie.id} movie={movie} />
+      ))}
+    </C.CardsWrapper>
   );
 };
 export default HomePage;
