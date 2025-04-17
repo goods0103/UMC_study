@@ -35,10 +35,10 @@ const Popular = () => {
     fetchNextPage,
     isFetchingNextPage,
     isError,
-  } = useGetInfiniteMovies("popular");
+  } = useGetInfiniteMovies("now_playing");
 
   const { ref, inView } = useInView({
-    threshold: 0,
+    threshold: 1,
   });
 
   useEffect(() => {
@@ -61,12 +61,20 @@ const Popular = () => {
   //     </>
   //   );
   // }
+  console.log(movies);
+  console.log("isFetching:", isFetching);
   return (
     <>
-      <C.CardsWrapper>
+      {/* <C.CardsWrapper>
         {movies?.pages.map((page, idx) => {
           return <Card key={idx} movies={page} />;
         })}
+        {isFetching && <CardListSkeleton number={20} />}
+      </C.CardsWrapper> */}
+      <C.CardsWrapper>
+        {movies?.pages.flatMap((page, _) =>
+          page.results.map((movie) => <Card key={movie.id} movie={movie} />)
+        )}
         {isFetching && <CardListSkeleton number={20} />}
       </C.CardsWrapper>
       <LoadingTag ref={ref}>

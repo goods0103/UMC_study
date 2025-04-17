@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 const CardBody = styled.div`
   display: grid;
   width: 100%;
-  // grid-template-columns: repeat(
-  //   auto-fill,
-  //   minmax(200px, 1fr)
-  // ); // 카드 크기에 따라 자동 배치
-  // gap: clamp(10px, 2vw, 20px); // 최소 10px, 최대 30px, 화면 너비에 따라
-  // align-items: flex-start;
+  grid-template-columns: repeat(
+    auto-fill,
+    minmax(200px, 1fr)
+  ); // 카드 크기에 따라 자동 배치
+  gap: clamp(10px, 2vw, 20px); // 최소 10px, 최대 30px, 화면 너비에 따라
+  align-items: flex-start;
 `;
 
 const CardBox = styled(Link)`
@@ -29,20 +29,28 @@ const MovieInfo1 = styled.div`
   color: white;
 `;
 
-const Card = ({ movies }) => {
+// const Card = ({ movies }) => {
+//   return (
+//     <CardBody>
+//       {movies?.results.map((movies) => (
+//         <CardBox to={`/movies/${movies.id}`} key={movies.id}>
+//           <ImgStyle1
+//             src={`https://image.tmdb.org/t/p/w200/${movies.poster_path}`}
+//           />
+//           <MovieInfo1>{movies.title}</MovieInfo1>
+//           <MovieInfo1>{movies.release_date}</MovieInfo1>
+//         </CardBox>
+//       ))}
+//     </CardBody>
+//   );
+// };
+const Card = ({ movie }) => {
   return (
-    <CardBody>
-      {movies?.results.map((movies) => (
-        // {movies.data?.results.map((movies) => (
-        <CardBox to={`/movies/${movies.id}`} key={movies.id}>
-          <ImgStyle1
-            src={`https://image.tmdb.org/t/p/w200/${movies.poster_path}`}
-          />
-          <MovieInfo1>{movies.title}</MovieInfo1>
-          <MovieInfo1>{movies.release_date}</MovieInfo1>
-        </CardBox>
-      ))}
-    </CardBody>
+    <CardBox to={`/movies/${movie.id}`}>
+      <ImgStyle1 src={`https://image.tmdb.org/t/p/w200/${movie.poster_path}`} />
+      <MovieInfo1>{movie.title}</MovieInfo1>
+      <MovieInfo1>{movie.release_date}</MovieInfo1>
+    </CardBox>
   );
 };
 

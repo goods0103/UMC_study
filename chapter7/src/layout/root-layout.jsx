@@ -10,7 +10,7 @@ const Layout = styled.div`
 
 const MainContent = styled.div`
   flex: 1; /* 남은 공간을 모두 차지 */
-  // flex-direction: column;
+  flex-direction: column;
   padding: 20px;
   display: flex;
   gap: 50px 20px;
