@@ -5,6 +5,9 @@ import Error from "../components/error";
 import CardListSkeleton from "../components/Card/Skeleton/card-list-skeleton";
 import * as C from "../components/Card/cardWrapper.style";
 import styled from "styled-components";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
+import { useGetMovies } from "../hooks/Queries/useGetMovies";
+import { useState, useEffect } from "react";
 
 const PageButton = styled.button`
   text-align: center;
@@ -25,19 +28,30 @@ const PageBox = styled.div`
 `;
 
 const UpComming = () => {
+  const [page, setPage] = useState(59);
+
   const {
     data: movies,
-    isLoading,
-    isError,
-  } = useCustomFetch("/movie/upcoming?language=ko-KR", "upComming");
+    isFetching,
+    isPlaceholderData,
+    isPending,
+  } = useQuery({
+    queryFn: () => useGetMovies({ category: "upcoming", pageParam: page }),
+    queryKey: ["movies", "upcoming", page],
+    placeholderData: keepPreviousData,
+  });
 
-  // if (isLoading) {
-  //   return (
-  //     <>
-  //       <CardListSkeleton number={20} />
-  //     </>
-  //   );
-  // }
+  useEffect(() => {
+    console.log("📦 movies changed", movies);
+  }, [movies]);
+
+  if (isPending) {
+    return (
+      <C.CardsWrapper>
+        <CardListSkeleton number={20} />
+      </C.CardsWrapper>
+    );
+  }
 
   // if (isError) {
   //   return (
@@ -49,15 +63,25 @@ const UpComming = () => {
 
   return (
     <>
-      <C.CardsWrapper>
-        {movies?.data.results.map((movie, idx) => (
-          <Card key={movie.id} movie={movie} />
-        ))}
-      </C.CardsWrapper>
+      <C.CardsWrapper></C.CardsWrapper>
       <PageBox>
-        <PageButton>이전</PageButton>
-        <div style={{ color: "white" }}> 1 </div>
-        <PageButton>다음</PageButton>
+        <PageButton
+          onClick={() => setPage((old) => Math.max(old - 1, 1))}
+          disabled={page === 1}
+        >
+          이전
+        </PageButton>
+        <div style={{ color: "white" }}> {page} </div>
+        <PageButton
+          onClick={() => {
+            if (!isPlaceholderData) {
+              setPage((old) => old + 1);
+            }
+          }}
+          disabled={isPlaceholderData}
+        >
+          다음
+        </PageButton>
       </PageBox>
     </>
   );
