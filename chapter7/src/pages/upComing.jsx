@@ -28,7 +28,7 @@ const PageBox = styled.div`
 `;
 
 const UpComming = () => {
-  const [page, setPage] = useState(59);
+  const [page, setPage] = useState(1);
 
   const {
     data: movies,
@@ -43,9 +43,11 @@ const UpComming = () => {
 
   useEffect(() => {
     console.log("📦 movies changed", movies);
+    // console.log(page);
+    // console.log(movies?.total_pages);
   }, [movies]);
 
-  if (isPending) {
+  if (isFetching) {
     return (
       <C.CardsWrapper>
         <CardListSkeleton number={20} />
@@ -63,7 +65,11 @@ const UpComming = () => {
 
   return (
     <>
-      <C.CardsWrapper></C.CardsWrapper>
+      <C.CardsWrapper>
+        {movies.results.map((movie, _) => (
+          <Card movie={movie} key={movie.id} />
+        ))}
+      </C.CardsWrapper>
       <PageBox>
         <PageButton
           onClick={() => setPage((old) => Math.max(old - 1, 1))}
@@ -78,7 +84,7 @@ const UpComming = () => {
               setPage((old) => old + 1);
             }
           }}
-          disabled={isPlaceholderData}
+          disabled={page === movies.total_pages}
         >
           다음
         </PageButton>
