@@ -28,6 +28,7 @@ const Sidebar = () => {
         <MdOutlineMovie />
         영화
       </SideButton>
+      <SideButton onClick={() => navigate("/todo")}>Todo</SideButton>
     </SideStyle1>
   );
 };

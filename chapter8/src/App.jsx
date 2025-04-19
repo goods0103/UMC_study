@@ -14,6 +14,7 @@ import UpComming from "./pages/upComing";
 import MovieDetail from "./pages/movieDetail";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import TodoPage from "./pages/todo";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: "search",
         element: <SearchPage />,
+      },
+      {
+        path: "todo",
+        element: <TodoPage />,
       },
       {
         path: "movies",
