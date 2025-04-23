@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 const CardBox = styled.div`
   display: flex;
@@ -44,6 +45,7 @@ const ButtonBox = styled.div`
 `;
 
 const Card = ({ todo, onDelete, onModify }) => {
+  const navigate = useNavigate();
   const title = useRef();
   const content = useRef();
   const isCheck = useRef();
@@ -56,9 +58,6 @@ const Card = ({ todo, onDelete, onModify }) => {
 
   const handleSave = () => {
     setIsModify(false);
-    // console.log(title.current.value);
-    // console.log(content.current.value);
-    // console.log(isCheck.current.checked);
     onModify(
       todo.id,
       title.current.value,
@@ -67,9 +66,13 @@ const Card = ({ todo, onDelete, onModify }) => {
     );
   };
 
+  const handleDetail = (id) => {
+    navigate(`/about/${id}`);
+  };
+
   return (
     <CardBox>
-      <input type="checkbox" ref={isCheck} />
+      <input type="checkbox" ref={isCheck} defaultChecked={todo.checked} />
       <TextBox>
         {isModify ? (
           <>
@@ -88,6 +91,7 @@ const Card = ({ todo, onDelete, onModify }) => {
           {isModify ? "저장" : "수정"}
         </button>
         <button onClick={() => onDelete(todo.id)}>삭제</button>
+        <button onClick={() => handleDetail(todo.id)}>상세</button>
       </ButtonBox>
     </CardBox>
   );

@@ -81,9 +81,9 @@ const MainPage = () => {
     }
   };
 
-  const onModify = async (id, title, conatent, checked) => {
+  const onModify = async (id, title, content, checked) => {
     try {
-      await patchTodo({ id, title, conatent, checked });
+      await patchTodo({ id, title, content, checked });
       const update = await getTodoList();
       setTodos(update[0]);
     } catch (e) {
