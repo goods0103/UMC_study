@@ -1,10 +1,10 @@
 import styled from "styled-components";
 import { Card } from "../components/TodoCard";
-import { useForm } from "react-hook-form";
+import { get, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getTodoList, postTodo, deleteTodo, patchTodo } from "../apis/todo";
-
+import { useNavigate } from "react-router-dom";
 const MainWrapper = styled.div`
   display: flex; // 🔥 flex 레이아웃 적용
   flex-direction: column; // 세로로 정렬
@@ -47,6 +47,7 @@ const FormStyle = styled.form`
 `;
 
 const MainPage = () => {
+  const navigate = useNavigate();
   const [todos, setTodos] = useState([]);
 
   const {
@@ -105,6 +106,15 @@ const MainPage = () => {
   }, []);
   //TODO: TODO 생성
 
+  const handleSearch = async (e) => {
+    if (e.key === "Enter") {
+      // console.log(e.target.value);
+      navigate(`/?title=${e.target.value}`, { replace: true });
+      const searchData = await getTodoList({ title: e.target.value });
+      setTodos(searchData[0]);
+    }
+  };
+
   return (
     <MainWrapper>
       <TopWrapper>
@@ -123,6 +133,11 @@ const MainPage = () => {
         </FormStyle>
       </TopWrapper>
       <BottomWrapper>
+        <input
+          type="text"
+          placeholder="검색어를 입력해주세요"
+          onKeyDown={handleSearch}
+        ></input>
         {todos?.map((todo, idx) => (
           <Card todo={todo} onDelete={onDelete} onModify={onModify} key={idx} />
         ))}
