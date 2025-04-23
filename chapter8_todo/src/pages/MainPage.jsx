@@ -1,7 +1,9 @@
 import styled from "styled-components";
 import { Card } from "../components/TodoCard";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getTodoList, postTodo, deleteTodo, patchTodo } from "../apis/todo";
 
 const MainWrapper = styled.div`
   display: flex; // 🔥 flex 레이아웃 적용
@@ -58,10 +60,50 @@ const MainPage = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    const newTodo = { ...data, checked: false };
-    setTodos((prevTodo) => [...prevTodo, newTodo]);
+  const onSubmit = async (data) => {
+    try {
+      await postTodo(data);
+      const update = await getTodoList();
+      setTodos(update[0]);
+    } catch (e) {
+      console.error(e);
+    }
   };
+
+  const onDelete = async (id) => {
+    try {
+      //이부분이랍니다 규호군
+      await deleteTodo({ id });
+      const update = await getTodoList();
+      setTodos(update[0]);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const onModify = async (id, title, conatent, checked) => {
+    try {
+      await patchTodo({ id, title, conatent, checked });
+      const update = await getTodoList();
+      setTodos(update[0]);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const todos = await getTodoList();
+        setTodos(todos[0]);
+        console.log(todos[0]);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchData();
+  }, []);
+  //TODO: TODO 생성
 
   return (
     <MainWrapper>
@@ -81,8 +123,8 @@ const MainPage = () => {
         </FormStyle>
       </TopWrapper>
       <BottomWrapper>
-        {todos.map((todo, idx) => (
-          <Card todo={todo} key={idx} />
+        {todos?.map((todo, idx) => (
+          <Card todo={todo} onDelete={onDelete} onModify={onModify} key={idx} />
         ))}
       </BottomWrapper>
     </MainWrapper>

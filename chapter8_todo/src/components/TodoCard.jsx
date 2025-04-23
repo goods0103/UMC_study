@@ -1,3 +1,4 @@
+import { useState, useRef } from "react";
 import styled from "styled-components";
 
 const CardBox = styled.div`
@@ -21,6 +22,11 @@ const TextBox = styled.div`
   max-height: 5vh;
   overflow: hidden;
   font-size: 14px;
+
+  textarea {
+    border-radius: 3px;
+    border: 1px solid #ccc;
+  }
 `;
 
 const ButtonBox = styled.div`
@@ -37,17 +43,51 @@ const ButtonBox = styled.div`
   }
 `;
 
-const Card = ({ todo }) => {
+const Card = ({ todo, onDelete, onModify }) => {
+  const title = useRef();
+  const content = useRef();
+  const isCheck = useRef();
+  //수정상태
+  const [isModify, setIsModify] = useState(false);
+
+  const handleInput = () => {
+    setIsModify(true);
+  };
+
+  const handleSave = () => {
+    setIsModify(false);
+    // console.log(title.current.value);
+    // console.log(content.current.value);
+    // console.log(isCheck.current.checked);
+    onModify(
+      todo.id,
+      title.current.value,
+      content.current.value,
+      isCheck.current.checked
+    );
+  };
+
   return (
     <CardBox>
-      <input type="checkbox" />
+      <input type="checkbox" ref={isCheck} />
       <TextBox>
-        <div>{todo.title}</div>
-        <div>{todo.content}</div>
+        {isModify ? (
+          <>
+            <input type="text" defaultValue={todo.title} ref={title} />
+            <input type="text" defaultValue={todo.content} ref={content} />
+          </>
+        ) : (
+          <>
+            <div>{todo.title}</div>
+            <div>{todo.content}</div>
+          </>
+        )}
       </TextBox>
       <ButtonBox>
-        <button>수정</button>
-        <button>삭제</button>
+        <button onClick={isModify ? handleSave : handleInput}>
+          {isModify ? "저장" : "수정"}
+        </button>
+        <button onClick={() => onDelete(todo.id)}>삭제</button>
       </ButtonBox>
     </CardBox>
   );
