@@ -62,8 +62,9 @@ const Card = ({ todo, onDelete, onModify }) => {
       id: todo.id,
       title: title.current.value,
       content: content.current.value,
-      isCheck: isCheck.current.checked,
+      checked: isCheck.current.checked,
     });
+    console.log(isCheck.current.checked);
   };
 
   const handleDetail = (id) => {
@@ -90,7 +91,7 @@ const Card = ({ todo, onDelete, onModify }) => {
         <button onClick={isModify ? handleSave : handleInput}>
           {isModify ? "저장" : "수정"}
         </button>
-        <button onClick={() => onDelete(todo.id)}>삭제</button>
+        <button onClick={() => onDelete({ id: todo.id })}>삭제</button>
         <button onClick={() => handleDetail(todo.id)}>상세</button>
       </ButtonBox>
     </CardBox>

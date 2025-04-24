@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Card } from "../components/TodoCard";
-import { get, useForm } from "react-hook-form";
-import { useEffect, useState, useMemo } from "react";
+import { useForm } from "react-hook-form";
+import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getTodoList, postTodo, deleteTodo, patchTodo } from "../apis/todo";
 import { useNavigate } from "react-router-dom";
@@ -58,6 +58,7 @@ const MainPage = () => {
   const navigate = useNavigate();
   // const [todos, setTodos] = useState([]);
   const queryClient = useQueryClient();
+  const [search, setSearch] = useState();
 
   const {
     register,
@@ -70,94 +71,76 @@ const MainPage = () => {
     },
   });
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const todos = await getTodoList();
-  //       setTodos(todos[0]);
-  //       console.log(todos[0]);
-  //     } catch (e) {
-  //       console.error(e);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
-
-  const { data: todos, refetch } = useQuery({
-    queryFn: () => getTodoList(),
-    queryKey: ["getTodoList", "all"],
+  const {
+    data: todos,
+    refetch,
+    isPending,
+  } = useQuery({
+    queryFn: () => getTodoList({ title: search }),
+    queryKey: ["todos", search],
     select: (d) => d[0],
   });
 
-  // const onSubmit = async (data) => {
-  //   try {
-  //     await postTodo(data);
-  //     const update = await getTodoList();
-  //     setTodos(update[0]);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
+  const { mutate: postTodoMutation } = useMutation({
+    mutationFn: postTodo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["todos"],
+      });
+      // refetch();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    onSettled: () => {
+      // console.log("항상실행됨");
+    },
+  });
 
   const onSubmit = (data) => {
-    postData.mutate(data);
+    postTodoMutation({ title: data.title, content: data.content });
   };
 
-  const postData = useMutation({
-    mutationFn: (data) => postTodo(data),
+  const { mutate: deleteTodoMutation } = useMutation({
+    mutationFn: deleteTodo,
     onSuccess: () => {
-      queryClient.invalidateQueries(["getTodoList", "all"]);
+      queryClient.invalidateQueries({
+        queryKey: ["todos"],
+      });
       refetch();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    onSettled: () => {
+      // console.log("항상실행됨");
     },
   });
 
-  // const onDelete = async (id) => {
-  //   try {
-  //     await deleteTodo({ id });
-  //     const update = await getTodoList();
-  //     setTodos(update[0]);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
-  const onDelete = useMutation({
-    mutationFn: (id) => deleteTodo({ id }),
+  const { mutate: patchTodoMutation } = useMutation({
+    mutationFn: patchTodo,
     onSuccess: () => {
-      queryClient.invalidateQueries(["getTodoList", "all"]);
+      queryClient.invalidateQueries({
+        queryKey: ["todos"],
+      });
       refetch();
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+    onSettled: () => {
+      // console.log("항상실행됨");
     },
   });
 
-  // const onModify = async (id, title, content, checked) => {
-  //   try {
-  //     await patchTodo({ id, title, content, checked });
-  //     const update = await getTodoList();
-  //     console.log(update);
-  //     setTodos(update[0]);
-  //   } catch (e) {
-  //     console.error(e);
-  //   }
-  // };
-
-  const onModify = useMutation({
-    mutationFn: ({ id, title, content, checked }) =>
-      patchTodo({ id, title, content, checked }),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["getTodoList", "all"]);
-      refetch();
-    },
-  });
-
-  const handleSearch = _.debounce(async (e) => {
-    // if (e.key === "Enter") {
-    // console.log(e.target.value);
-    navigate(`/?title=${e.target.value}`, { replace: true });
-    const searchData = await getTodoList({ title: e.target.value });
-    setTodos(searchData[0]);
-    console.log("debounce search");
-    // }
-  }, 500);
+  // const handleSearch = _.debounce(async (e) => {
+  //   // if (e.key === "Enter") {
+  //   // console.log(e.target.value);
+  //   navigate(`/?title=${e.target.value}`, { replace: true });
+  //   const searchData = await getTodoList({ title: e.target.value });
+  //   console.log("debounce search");
+  //   // }
+  // }, 500);
 
   return (
     <MainWrapper>
@@ -180,16 +163,21 @@ const MainPage = () => {
         <input
           type="text"
           placeholder="검색어를 입력해주세요"
-          onChange={handleSearch}
+          onChange={(e) => setSearch(e.target.value)}
+          value={search}
         ></input>
-        {todos?.map((todo, idx) => (
-          <Card
-            todo={todo}
-            onDelete={onDelete.mutate}
-            onModify={onModify.mutate}
-            key={idx}
-          />
-        ))}
+        {isPending ? (
+          <div>로딩중</div>
+        ) : (
+          todos?.map((todo) => (
+            <Card
+              todo={todo}
+              onDelete={deleteTodoMutation}
+              onModify={patchTodoMutation}
+              key={todo.id}
+            />
+          ))
+        )}
       </BottomWrapper>
     </MainWrapper>
   );
