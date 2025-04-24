@@ -1,10 +1,12 @@
 import styled from "styled-components";
 import { Card } from "../components/TodoCard";
 import { get, useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getTodoList, postTodo, deleteTodo, patchTodo } from "../apis/todo";
 import { useNavigate } from "react-router-dom";
+import _ from "lodash";
+
 const MainWrapper = styled.div`
   display: flex; // 🔥 flex 레이아웃 적용
   flex-direction: column; // 세로로 정렬
@@ -73,7 +75,6 @@ const MainPage = () => {
 
   const onDelete = async (id) => {
     try {
-      //이부분이랍니다 규호군
       await deleteTodo({ id });
       const update = await getTodoList();
       setTodos(update[0]);
@@ -86,6 +87,7 @@ const MainPage = () => {
     try {
       await patchTodo({ id, title, content, checked });
       const update = await getTodoList();
+      console.log(update);
       setTodos(update[0]);
     } catch (e) {
       console.error(e);
@@ -106,14 +108,15 @@ const MainPage = () => {
   }, []);
   //TODO: TODO 생성
 
-  const handleSearch = async (e) => {
-    if (e.key === "Enter") {
-      // console.log(e.target.value);
-      navigate(`/?title=${e.target.value}`, { replace: true });
-      const searchData = await getTodoList({ title: e.target.value });
-      setTodos(searchData[0]);
-    }
-  };
+  const handleSearch = _.debounce(async (e) => {
+    // if (e.key === "Enter") {
+    // console.log(e.target.value);
+    navigate(`/?title=${e.target.value}`, { replace: true });
+    const searchData = await getTodoList({ title: e.target.value });
+    setTodos(searchData[0]);
+    console.log("debounce search");
+    // }
+  }, 500);
 
   return (
     <MainWrapper>
@@ -136,7 +139,7 @@ const MainPage = () => {
         <input
           type="text"
           placeholder="검색어를 입력해주세요"
-          onKeyDown={handleSearch}
+          onChange={handleSearch}
         ></input>
         {todos?.map((todo, idx) => (
           <Card todo={todo} onDelete={onDelete} onModify={onModify} key={idx} />
