@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Card } from "../components/TodoCard";
 import { get, useForm } from "react-hook-form";
 import { useEffect, useState, useMemo } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getTodoList, postTodo, deleteTodo, patchTodo } from "../apis/todo";
 import { useNavigate } from "react-router-dom";
 import _ from "lodash";
@@ -46,11 +46,18 @@ const FormStyle = styled.form`
     border-radius: 3px;
     border: 1px solid #ccc;
   }
+  button:hover {
+    background-color: #2779bd;
+  }
+  button:active {
+    transform: scale(0.95);
+  }
 `;
 
 const MainPage = () => {
   const navigate = useNavigate();
-  const [todos, setTodos] = useState([]);
+  // const [todos, setTodos] = useState([]);
+  const queryClient = useQueryClient();
 
   const {
     register,
@@ -63,50 +70,84 @@ const MainPage = () => {
     },
   });
 
-  const onSubmit = async (data) => {
-    try {
-      await postTodo(data);
-      const update = await getTodoList();
-      setTodos(update[0]);
-    } catch (e) {
-      console.error(e);
-    }
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const todos = await getTodoList();
+  //       setTodos(todos[0]);
+  //       console.log(todos[0]);
+  //     } catch (e) {
+  //       console.error(e);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+  const { data: todos, refetch } = useQuery({
+    queryFn: () => getTodoList(),
+    queryKey: ["getTodoList", "all"],
+    select: (d) => d[0],
+  });
+
+  // const onSubmit = async (data) => {
+  //   try {
+  //     await postTodo(data);
+  //     const update = await getTodoList();
+  //     setTodos(update[0]);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
+
+  const onSubmit = (data) => {
+    postData.mutate(data);
   };
 
-  const onDelete = async (id) => {
-    try {
-      await deleteTodo({ id });
-      const update = await getTodoList();
-      setTodos(update[0]);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  const postData = useMutation({
+    mutationFn: (data) => postTodo(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getTodoList", "all"]);
+      refetch();
+    },
+  });
 
-  const onModify = async (id, title, content, checked) => {
-    try {
-      await patchTodo({ id, title, content, checked });
-      const update = await getTodoList();
-      console.log(update);
-      setTodos(update[0]);
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // const onDelete = async (id) => {
+  //   try {
+  //     await deleteTodo({ id });
+  //     const update = await getTodoList();
+  //     setTodos(update[0]);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const todos = await getTodoList();
-        setTodos(todos[0]);
-        console.log(todos[0]);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchData();
-  }, []);
-  //TODO: TODO 생성
+  const onDelete = useMutation({
+    mutationFn: (id) => deleteTodo({ id }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getTodoList", "all"]);
+      refetch();
+    },
+  });
+
+  // const onModify = async (id, title, content, checked) => {
+  //   try {
+  //     await patchTodo({ id, title, content, checked });
+  //     const update = await getTodoList();
+  //     console.log(update);
+  //     setTodos(update[0]);
+  //   } catch (e) {
+  //     console.error(e);
+  //   }
+  // };
+
+  const onModify = useMutation({
+    mutationFn: ({ id, title, content, checked }) =>
+      patchTodo({ id, title, content, checked }),
+    onSuccess: () => {
+      queryClient.invalidateQueries(["getTodoList", "all"]);
+      refetch();
+    },
+  });
 
   const handleSearch = _.debounce(async (e) => {
     // if (e.key === "Enter") {
@@ -142,7 +183,12 @@ const MainPage = () => {
           onChange={handleSearch}
         ></input>
         {todos?.map((todo, idx) => (
-          <Card todo={todo} onDelete={onDelete} onModify={onModify} key={idx} />
+          <Card
+            todo={todo}
+            onDelete={onDelete.mutate}
+            onModify={onModify.mutate}
+            key={idx}
+          />
         ))}
       </BottomWrapper>
     </MainWrapper>

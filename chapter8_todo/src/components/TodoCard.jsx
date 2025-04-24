@@ -58,12 +58,12 @@ const Card = ({ todo, onDelete, onModify }) => {
 
   const handleSave = () => {
     setIsModify(false);
-    onModify(
-      todo.id,
-      title.current.value,
-      content.current.value,
-      isCheck.current.checked
-    );
+    onModify({
+      id: todo.id,
+      title: title.current.value,
+      content: content.current.value,
+      isCheck: isCheck.current.checked,
+    });
   };
 
   const handleDetail = (id) => {
