@@ -4,8 +4,8 @@ import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getTodoList, postTodo, deleteTodo, patchTodo } from "../apis/todo";
-import { useNavigate } from "react-router-dom";
 import _ from "lodash";
+import { useDebounce } from "../hooks/customDebounce";
 
 const MainWrapper = styled.div`
   display: flex; // 🔥 flex 레이아웃 적용
@@ -55,10 +55,10 @@ const FormStyle = styled.form`
 `;
 
 const MainPage = () => {
-  const navigate = useNavigate();
-  // const [todos, setTodos] = useState([]);
   const queryClient = useQueryClient();
-  const [search, setSearch] = useState();
+  const [search, setSearch] = useState("");
+
+  const debouncedSearch = useDebounce(search, 1000);
 
   const {
     register,
@@ -71,13 +71,9 @@ const MainPage = () => {
     },
   });
 
-  const {
-    data: todos,
-    refetch,
-    isPending,
-  } = useQuery({
-    queryFn: () => getTodoList({ title: search }),
-    queryKey: ["todos", search],
+  const { data: todos, isPending } = useQuery({
+    queryFn: () => getTodoList({ title: debouncedSearch }),
+    queryKey: ["todos", debouncedSearch],
     select: (d) => d[0],
   });
 
@@ -107,7 +103,7 @@ const MainPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["todos"],
       });
-      refetch();
+      // refetch();
     },
     onError: (error) => {
       console.log(error);
@@ -123,7 +119,7 @@ const MainPage = () => {
       queryClient.invalidateQueries({
         queryKey: ["todos"],
       });
-      refetch();
+      // refetch();
     },
     onError: (error) => {
       console.log(error);
