@@ -80,7 +80,8 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  const { idKey, setIdKey, setIsLogin, setUserName } = useContext(AuthContext);
+  const { idKey, setIdKey, setIsLogin, setUserName, userName } =
+    useContext(AuthContext);
 
   const {
     register,
@@ -101,8 +102,6 @@ const LoginPage = () => {
     mutationFn: userLogin,
     mutationKey: ["userInfo"],
     onSuccess: ({ res, formData }) => {
-      console.log(res);
-      console.log(formData);
       saveUserToken({ res, formData });
       setIsLogin(true);
       navigate("/");
@@ -121,44 +120,16 @@ const LoginPage = () => {
   };
 
   const { data } = useQuery({
-    queryFn: () => setUser(idKey),
+    queryFn: () => {
+      console.log("queryFn 실행됨");
+      return setUser(idKey);
+    },
     queryKey: ["userInfo", idKey],
-    onSuccess: (res) => {
-      console.log(res);
-      setUserName(res.email);
+    select: (data) => {
+      setUserName(data.email);
     },
-    onError: (error) => {
-      alert(error.response.data.message);
-    },
-    enabled: !!idKey,
+    enabled: !!localStorage.getItem(idKey),
   });
-
-  // useEffect(() => {
-  //   if (idKey) {
-  //     const setUser = async () => {
-  //       try {
-  //         console.log("idKey: ", idKey);
-  //         const Authheader = `Bearer ${
-  //           JSON.parse(localStorage.getItem(idKey)).accessToken
-  //         }`;
-
-  //         const res = await axios.get("http://localhost:3000/user/me", {
-  //           headers: {
-  //             Authorization: Authheader,
-  //           },
-  //         });
-  //         if (res.status == 200) {
-  //           console.log(res.data.email);
-  //           setUserName(res.data.email);
-  //         }
-  //       } catch (e) {
-  //         console.log("error :", e.response);
-  //       } finally {
-  //       }
-  //     };
-  //     setUser();
-  //   }
-  // }, [idKey]);
 
   return (
     <LoginContainer>

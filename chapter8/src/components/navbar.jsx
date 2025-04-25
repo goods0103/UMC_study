@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axios from "axios";
 //navbar style
@@ -49,7 +49,8 @@ const SignStyle = styled.button`
   border-radius: 5px;
 `;
 const Navbar = () => {
-  const { isLogin, idKey, setIsLogin, userName } = useContext(AuthContext);
+  const { isLogin, idKey, setIsLogin, userName, setUserName } =
+    useContext(AuthContext);
 
   const navigate = useNavigate();
   return (
@@ -60,9 +61,9 @@ const Navbar = () => {
           <LoginStyle>{userName}님 반갑습니다</LoginStyle>
           <LoginStyle
             onClick={() => {
-              navigate("/");
               setIsLogin(false);
               localStorage.removeItem(idKey);
+              navigate("/");
             }}
           >
             로그아웃

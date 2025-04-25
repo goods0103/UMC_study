@@ -30,6 +30,7 @@ const setUser = async (idKey) => {
     const Authheader = `Bearer ${
       JSON.parse(localStorage.getItem(idKey)).accessToken
     }`;
+    console.log("auth: ", Authheader);
     const { data } = await axios.get("http://localhost:3000/user/me", {
       headers: {
         Authorization: Authheader,
