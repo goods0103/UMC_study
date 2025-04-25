@@ -6,6 +6,8 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useState, useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { userLogin, setUser } from "../apis/authApis";
 
 const LoginContainer = styled.div`
   width: 100%;
@@ -89,57 +91,74 @@ const LoginPage = () => {
     resolver: yupResolver(schema),
   });
 
-  const saveUserToken = ({ res, data }) => {
+  //login시에
+  const onSubmit = (data) => {
+    userLoginMutation(data);
+  };
+
+  //postLogin
+  const { mutate: userLoginMutation } = useMutation({
+    mutationFn: userLogin,
+    mutationKey: ["userInfo"],
+    onSuccess: ({ res, formData }) => {
+      console.log(res);
+      console.log(formData);
+      saveUserToken({ res, formData });
+      setIsLogin(true);
+      navigate("/");
+    },
+    onError: (error) => {
+      alert(error.response.data.message);
+      reset();
+    },
+  });
+
+  const saveUserToken = ({ res, formData }) => {
     //로컬스토리지에 저장 key == id
-    const key = data.email.split("@")[0];
-    localStorage.setItem(key, JSON.stringify(res.data));
+    const key = formData.email.split("@")[0];
+    localStorage.setItem(key, JSON.stringify(res));
     setIdKey(key);
   };
 
-  useEffect(() => {
-    if (idKey) {
-      const setUser = async () => {
-        try {
-          console.log("idKey: ", idKey);
-          const Authheader = `Bearer ${
-            JSON.parse(localStorage.getItem(idKey)).accessToken
-          }`;
+  const { data } = useQuery({
+    queryFn: () => setUser(idKey),
+    queryKey: ["userInfo", idKey],
+    onSuccess: (res) => {
+      console.log(res);
+      setUserName(res.email);
+    },
+    onError: (error) => {
+      alert(error.response.data.message);
+    },
+    enabled: !!idKey,
+  });
 
-          const res = await axios.get("http://localhost:3000/user/me", {
-            headers: {
-              Authorization: Authheader,
-            },
-          });
-          if (res.status == 200) {
-            console.log(res.data.email);
-            setUserName(res.data.email);
-          }
-        } catch (e) {
-          console.log("error :", e.response);
-        } finally {
-        }
-      };
-      setUser();
-    }
-  }, [idKey]);
+  // useEffect(() => {
+  //   if (idKey) {
+  //     const setUser = async () => {
+  //       try {
+  //         console.log("idKey: ", idKey);
+  //         const Authheader = `Bearer ${
+  //           JSON.parse(localStorage.getItem(idKey)).accessToken
+  //         }`;
 
-  const onSubmit = async (data) => {
-    try {
-      const res = await axios.post("http://localhost:3000/auth/login", data);
-      // console.log(res.data);
-      // console.log(res.status);
-      if (res.status == 201) {
-        saveUserToken({ res, data });
-        setIsLogin(true);
-        navigate("/");
-      }
-    } catch (e) {
-      console.log("에러 : ", e.response.data);
-      alert(e.response.data.message);
-      reset();
-    } finally {
-    }
-  };
+  //         const res = await axios.get("http://localhost:3000/user/me", {
+  //           headers: {
+  //             Authorization: Authheader,
+  //           },
+  //         });
+  //         if (res.status == 200) {
+  //           console.log(res.data.email);
+  //           setUserName(res.data.email);
+  //         }
+  //       } catch (e) {
+  //         console.log("error :", e.response);
+  //       } finally {
+  //       }
+  //     };
+  //     setUser();
+  //   }
+  // }, [idKey]);
 
   return (
     <LoginContainer>

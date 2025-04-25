@@ -1,12 +1,9 @@
-///import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
 import useForm from "../hooks/use-form";
 import { validateLogin } from "../utils/validate";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import { signUp } from "../apis/authApis";
 
 //yup이라는 유효성 검사 라이브러리 사용
 const SignUpContainer = styled.div`
@@ -69,27 +66,6 @@ const ErrorText = styled.h1`
 `;
 
 const SignUpPage = () => {
-  // const schema = yup.object().shape({
-  //   email: yup.string().email().required("이메일을 반드시 입력해주세요"),
-  //   password: yup
-  //     .string()
-  //     .min(8, "비밀번호는 8자리 이상이여야 합니다")
-  //     .max(16, "비밀번호는 16자리 미만이여야 합니다")
-  //     .required(),
-  // });
-
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors },
-  // } = useForm({
-  //   resolver: yupResolver(schema),
-  // });
-
-  // const onSubmit = (data) => {
-  //   console.log("폼 데이터 제출");
-  //   console.log(data);
-  // };
   const login = useForm({
     initialValue: {
       email: "",
@@ -107,26 +83,22 @@ const SignUpPage = () => {
     passwordCheck: login?.values.checkpw,
   };
 
-  //signup Post요청날리기
-  const handleSubmit = async (e) => {
-    try {
-      e.preventDefault();
-      const res = await axios.post(
-        "http://localhost:3000/auth/register",
-        userData
-      );
-      console.log(userData);
-      console.log(res.data);
-      console.log(res.status);
-      res.status == 201 && navigate("/login");
-    } catch (e) {
-      //console.error("에러: ", e.response.data);
-      alert(e.response.data.message);
-      console.log(userData);
-      login.resetForm();
-    } finally {
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    signUpMutaion(userData);
   };
+
+  const { mutate: signUpMutaion } = useMutation({
+    mutationFn: signUp,
+    mutationKey: ["signUp"],
+    onSuccess: () => {
+      navigate("/login");
+      login.resetForm();
+    },
+    onError: (error) => {
+      alert(error.response.data.message);
+    },
+  });
 
   return (
     <SignUpContainer>
